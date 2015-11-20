@@ -4,45 +4,83 @@ import java.util.ArrayList;
 
 public class Spielfeld {
 
- 	private ArrayList<Spielstein> steine;
- 	
- 	public Spielfeld(ArrayList<Spielstein> s){
- 		this.steine = s;
- 	}
- 	
- 	public void zeigeBrett(){
- 		this.dreheBrett();
- 		for(int i = 0; i < 13; i++){
- 			for(int j = 0; j < 13; j++){
- 				if(i % 2 == 0 && j % 2 == 1){
- 					System.out.print("-");
- 				}
- 				else if(i % 2 == 0 && j % 2 == 0){
- 					System.out.print(" ");
- 				}
- 				else if(i % 2 == 1 && j % 2 == 0){
- 					System.out.print("|");
- 				}
- 				else if(i % 2 == 1 && j % 2 == 1){
- 					System.out.print(" ");
- 				}
- 			}
- 			System.out.println();
- 		}
- 	}
- 	
- 	public void dreheBrett(){
- 		for(Spielstein stein: steine){
- 			stein.setX(5-stein.getX());
- 			stein.setY(5-stein.getY());
- 		}
- 	}
- 	
- 	public void setSteine(ArrayList<Spielstein> s){
- 		this.steine = s;
- 	}
- 	
- 	public ArrayList<Spielstein> getSteine(){
- 		return this.steine;
- 	}
+	private ArrayList<Spielstein> steine;
+
+	public Spielfeld(ArrayList<Spielstein> s){
+		this.steine = s;
+	}
+
+	public void zeigeBrett(){
+		boolean reihe = true;
+		int reiheHelp = 0;
+
+		for(int i = 0; i < 13; i++){
+			for(int j = 0; j < 13; j++){
+				if(i % 2 == 0 && j % 2 == 1){
+					System.out.print("-");
+				}
+				else if(i % 2 == 0 && j % 2 == 0){
+					System.out.print(" ");
+				}
+				else if(i % 2 == 1 && j % 2 == 0){
+					System.out.print("|");
+				}
+				else if(i % 2 == 1 && j % 2 == 1){
+					if(reihe){
+						switch(j){
+						case 3: System.out.print("#");break;
+						case 7: System.out.print("#");break;
+						case 11: System.out.print("#");break;
+						default: System.out.print(this.istStein(i/2, j/2));
+						}
+					}
+					else{
+						switch(j){
+						case 1: System.out.print("#");break;
+						case 5: System.out.print("#");break;
+						case 9: System.out.print("#");break;
+						default: System.out.print(this.istStein(i/2, j/2));
+						}
+					}
+
+				}
+			}
+			System.out.println();
+			reiheHelp++;
+			if(reiheHelp > 0 && reiheHelp % 2 == 0){
+				if(reihe){
+					reihe = false;
+				}
+				else{
+					reihe = true;
+				}
+			}
+
+		}
+	}
+
+	public void dreheBrett(){
+		for(Spielstein stein: steine){
+			stein.getK().setX(5-stein.getK().getX());
+			stein.getK().setY(5-stein.getK().getY());
+		}
+	}
+
+	public void setSteine(ArrayList<Spielstein> s){
+		this.steine = s;
+	}
+
+	public ArrayList<Spielstein> getSteine(){
+		return this.steine;
+	}
+	
+	public char istStein(int x, int y){
+		for(Spielstein stein: steine){
+			if(stein.getK().getX() == x && stein.getK().getY() == y){
+				return stein.getColor();
+			}
+		}
+		
+		return ' ';
+	}
 }

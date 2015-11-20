@@ -2,40 +2,20 @@ package joern.spielbrett;
 
 public class Spielstein {
 
-	private int x,y;
-	private String color;
-	private boolean lady = false;
+	private Koordinate k;
+	private char color;
+	private boolean lady;
 	
-	public Spielstein(int x, int y, String c){
-		this.x = x;
-		this.y = y;
-		this.color = c;
-	}
-	
-	public Spielstein(int x, int y, String c, boolean l){
-		this.x = x;
-		this.y = y;
+	public Spielstein(int x, int y, char c, boolean l){
+		this.setK(new Koordinate(x,y));
 		this.color = c;
 		this.lady = l;
 	}
 	
-	public void setX(int x){
-		this.x = x;
-	}
-	
-	public int getX(){
-		return this.x;
-	}
-	
-	public void setY(int y){
-		this.y = y;
-	}
-	
-	public int getY(){
-		return this.y;
-	}
-	
-	public String getColor(){
+	public char getColor(){
+		if(lady){
+			return (char)(this.color - ' ');
+		}
 		return this.color;
 	}
 	
@@ -45,5 +25,13 @@ public class Spielstein {
 	
 	public boolean getLady(){
 		return this.lady;
+	}
+
+	public Koordinate getK() {
+		return k;
+	}
+
+	public void setK(Koordinate k) {
+		this.k = k;
 	}
 }
