@@ -1,4 +1,4 @@
-package joern.spielbrett;
+package tobias.test;
 
 public class Spielstein {
 
