@@ -7,8 +7,7 @@ public class Spielfeld {
 	private Koordinate[][] koords;
 	private ArrayList<Spielstein> steine;
 
-	public Spielfeld(ArrayList<Spielstein> s){
-		this.steine = s;
+	public Spielfeld(){
 		this.setKoords(this.initFeld());
 	}
 
@@ -66,7 +65,7 @@ public class Spielfeld {
 
 		Spielstein temp;
 
-		for(int i = 0; i < 6; i++) {
+		for(int i = 0; i < 3; i++) {
 			for(int j = 0; j < 6; j++) {
 
 				temp = koords[i][j].getSpielstein();

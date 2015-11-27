@@ -6,9 +6,7 @@ public class Menue {
 
 	public static void main(String[] args) {
 
-		ArrayList<Spielstein> bla = new ArrayList<Spielstein>() ;
-
-		Spielfeld brett = new Spielfeld(bla);
+		Spielfeld brett = new Spielfeld();
 
 		brett.initStein();
 		
