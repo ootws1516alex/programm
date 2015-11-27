@@ -4,7 +4,6 @@ public class Koordinate {
 
 	private String name;
 	private int x,y;
-	private String name;
 	private Spielstein spielstein;
 	
 	public Koordinate(int x, int y, Spielstein spielstein, String name){
@@ -12,14 +11,6 @@ public class Koordinate {
 		this.y = y;
 		this.spielstein=spielstein;
 		this.setName(name);
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public void setX(int x){
