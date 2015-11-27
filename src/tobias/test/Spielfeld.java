@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 public class Spielfeld {
 
+	private Koordinate[][] koords;
 	private ArrayList<Spielstein> steine;
 
 	public Spielfeld(ArrayList<Spielstein> s){
 		this.steine = s;
+		this.setKoords(this.initFeld());
 	}
 
 	public void zeigeBrett(){
@@ -82,5 +84,34 @@ public class Spielfeld {
 		}
 		
 		return ' ';
+	}
+	
+	public Koordinate[][] initFeld(){
+		
+		Koordinate[][] koords = new Koordinate[6][6];
+		
+		for(int i = 0; i < 6; i++){
+			for(int j = 0; j < 6; j++){
+				char neu = (char)(i+65);
+				String name = "" + neu + (j+1);
+				koords[i][j] = new Koordinate(i,j,null,name);
+			}
+		}
+		
+		return koords;
+	}
+	
+	public void initStein(){
+		this.koords[1][0].setSpielstein(new Spielstein(koords[1][0],'w', false));
+		this.koords[0][1].setSpielstein(new Spielstein(koords[0][1],'w', false));
+		this.koords[1][0].setSpielstein(new Spielstein(koords[1][0],'w', false));
+	}
+
+	public Koordinate[][] getKoords() {
+		return koords;
+	}
+
+	public void setKoords(Koordinate[][] koords) {
+		this.koords = koords;
 	}
 }
