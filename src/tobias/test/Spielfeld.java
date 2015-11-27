@@ -61,10 +61,21 @@ public class Spielfeld {
 		}
 	}
 
+	
 	public void dreheBrett(){
 
-		
-		
+		Spielstein temp;
+
+		for(int i = 0; i < 6; i++) {
+			for(int j = 0; j < 6; j++) {
+
+				temp = koords[i][j].getSpielstein();
+				koords[i][j].setSpielstein(koords[5 - i][5-j].getSpielstein());
+				koords[5 - i][5-j].setSpielstein(temp);;
+
+			}
+		}
+
 	}
 
 	public void setSteine(ArrayList<Spielstein> s){
