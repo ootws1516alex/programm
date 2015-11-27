@@ -3,6 +3,7 @@ package tobias.test;
 public class Koordinate {
 
 	private int x,y;
+	private String name;
 	private Spielstein spielstein;
 	
 	public Koordinate(int x, int y, Spielstein spielstein){
@@ -11,6 +12,14 @@ public class Koordinate {
 		this.spielstein=spielstein;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public void setX(int x){
 		this.x = x;
 	}
