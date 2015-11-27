@@ -2,22 +2,15 @@ package tobias.test;
 
 public class Koordinate {
 
-	private int x,y;
 	private String name;
+	private int x,y;
 	private Spielstein spielstein;
 	
-	public Koordinate(int x, int y, Spielstein spielstein){
+	public Koordinate(int x, int y, Spielstein spielstein, String name){
 		this.x = x;
 		this.y = y;
 		this.spielstein=spielstein;
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+		this.setName(name);
 	}
 
 	public void setX(int x){
@@ -42,6 +35,14 @@ public class Koordinate {
 	
 	public void setSpielstein(Spielstein spielstein){
 		this.spielstein=spielstein;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
