@@ -61,8 +61,8 @@ public class Spielfeld {
 
 	public void dreheBrett(){
 		for(Spielstein stein: steine){
-			stein.getK().setX(5-stein.getK().getX());
-			stein.getK().setY(5-stein.getK().getY());
+			stein.getKoordinate().setX(5-stein.getKoordinate().getX());
+			stein.getKoordinate().setY(5-stein.getKoordinate().getY());
 		}
 	}
 
@@ -76,7 +76,7 @@ public class Spielfeld {
 	
 	public char istStein(int x, int y){
 		for(Spielstein stein: steine){
-			if(stein.getK().getX() == x && stein.getK().getY() == y){
+			if(stein.getKoordinate().getX() == x && stein.getKoordinate().getY() == y){
 				return stein.getColor();
 			}
 		}

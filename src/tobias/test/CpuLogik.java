@@ -13,12 +13,7 @@ public class CpuLogik {
 	}
 	
 	public void priority(){
-		int x,y;
-		Spielstein aktStein;
-		aktStein=spielSteineW.get(0);
-		x=aktStein.getK().getX();
-		y=aktStein.getK().getY();
-		
+
 		
 	}
 	

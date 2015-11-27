@@ -3,27 +3,12 @@ package tobias.test;
 public class Koordinate {
 
 	private int x,y;
-	private int nextX,nextY;
+	private Spielstein spielstein;
 	
-	public int getNextX() {
-		return nextX;
-	}
-
-	public void setNextX(int nextX) {
-		this.nextX = nextX;
-	}
-
-	public int getNextY() {
-		return nextY;
-	}
-
-	public void setNextY(int nextY) {
-		this.nextY = nextY;
-	}
-
-	public Koordinate(int x, int y){
+	public Koordinate(int x, int y, Spielstein spielstein){
 		this.x = x;
 		this.y = y;
+		this.spielstein=spielstein;
 	}
 	
 	public void setX(int x){
@@ -42,6 +27,12 @@ public class Koordinate {
 		return this.y;
 	}
 	
+	public Spielstein getSpielstein(){
+		return this.spielstein;
+	}
 	
-	
+	public void setSpielstein(Spielstein spielstein){
+		this.spielstein=spielstein;
+	}
+
 }
