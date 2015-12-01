@@ -1,11 +1,8 @@
 package tobias.test;
 
-import java.util.ArrayList;
-
 public class Spielfeld {
 
 	private Koordinate[][] koords;
-	private ArrayList<Spielstein> steine;
 
 	public Spielfeld(){
 		this.setKoords(this.initFeld());
@@ -77,14 +74,6 @@ public class Spielfeld {
 
 	}
 
-	public void setSteine(ArrayList<Spielstein> s){
-		this.steine = s;
-	}
-
-	public ArrayList<Spielstein> getSteine(){
-		return this.steine;
-	}
-
 	public char istStein(int x, int y){
 
 		if(koords[x][y].getSpielstein() != null) {
@@ -113,20 +102,33 @@ public class Spielfeld {
 		return koords;
 	}
 
-	public void initStein(){
-		this.koords[0][1].setSpielstein(new Spielstein(koords[0][1],'s', false));
-		this.koords[0][3].setSpielstein(new Spielstein(koords[0][3],'s', false));
-		this.koords[0][5].setSpielstein(new Spielstein(koords[0][5],'s', true));
-		this.koords[1][0].setSpielstein(new Spielstein(koords[1][0],'s', false));
-		this.koords[1][2].setSpielstein(new Spielstein(koords[1][2],'s', false));
-		this.koords[1][4].setSpielstein(new Spielstein(koords[1][4],'s', false));
-		this.koords[4][1].setSpielstein(new Spielstein(koords[4][1],'w', false));
-		this.koords[4][3].setSpielstein(new Spielstein(koords[4][3],'w', false));
-		this.koords[4][5].setSpielstein(new Spielstein(koords[4][5],'w', false));
-		this.koords[5][0].setSpielstein(new Spielstein(koords[5][0],'w', true));
-		this.koords[5][2].setSpielstein(new Spielstein(koords[5][2],'w', false));
-		this.koords[5][4].setSpielstein(new Spielstein(koords[5][4],'w', false));
+	public void initStein(int color){
+		
+		char color1,color2;
+		if(color==1){
+			color1='s';
+			color2='w';
+		}else{
+			color1='w';
+			color2='s';
+		}
+		
+		this.koords[0][1].setSpielstein(new Spielstein(koords[0][1],color1, false));
+		this.koords[0][3].setSpielstein(new Spielstein(koords[0][3],color1, false));
+		this.koords[0][5].setSpielstein(new Spielstein(koords[0][5],color1, true));
+		this.koords[1][0].setSpielstein(new Spielstein(koords[1][0],color1, false));
+		this.koords[1][2].setSpielstein(new Spielstein(koords[1][2],color1, false));
+		this.koords[1][4].setSpielstein(new Spielstein(koords[1][4],color1, false));
+		this.koords[4][1].setSpielstein(new Spielstein(koords[4][1],color2, false));
+		this.koords[4][3].setSpielstein(new Spielstein(koords[4][3],color2, false));
+		this.koords[4][5].setSpielstein(new Spielstein(koords[4][5],color2, false));
+		this.koords[5][0].setSpielstein(new Spielstein(koords[5][0],color2, true));
+		this.koords[5][2].setSpielstein(new Spielstein(koords[5][2],color2, false));
+		this.koords[5][4].setSpielstein(new Spielstein(koords[5][4],color2, false));
 	}
+	
+	
+	
 
 	public Koordinate[][] getKoords() {
 		return koords;

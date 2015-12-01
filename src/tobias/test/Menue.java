@@ -8,9 +8,9 @@ public class Menue {
 
 	public static void main(String[] args) {
 
-		starteMenue();
+		//starteMenue();
 		
-		//	Spielfeld brett = new Spielfeld();
+		//Spielfeld brett = new Spielfeld();
 		//brett.initStein();
 		//brett.zeigeBrett();
 		//System.out.println();
@@ -111,7 +111,7 @@ public class Menue {
 	}
 	
 	public static void anleitung(){
-		System.out.println("Bla");
+		System.out.println("bla");
 	}
 
 }
