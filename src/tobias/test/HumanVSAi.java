@@ -5,6 +5,7 @@ public class HumanVSAi {
 	private int color;
 	private int time;
 	private Koordinate[][] koords;
+	private boolean isRunning=false;
 	
 	public HumanVSAi(int time, int color){
 		this.time=time;
@@ -21,10 +22,19 @@ public class HumanVSAi {
 		Spielfeld spielfeld = new Spielfeld();
 		spielfeld.initStein(color);
 		koords=spielfeld.getKoords();
+		
 	}
 	public void startGame(){
+		int runde=1;
 		
-		
+		while(isRunning==true){
+			
+			
+			
+			
+			
+			
+		}
 		
 		
 	}

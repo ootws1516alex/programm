@@ -127,9 +127,6 @@ public class Spielfeld {
 		this.koords[5][4].setSpielstein(new Spielstein(koords[5][4],color2, false));
 	}
 	
-	
-	
-
 	public Koordinate[][] getKoords() {
 		return koords;
 	}

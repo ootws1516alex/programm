@@ -10,7 +10,6 @@ public class Spieler {
 		this.farbe=farbe;
 	}
 	
-	
 	public String getName() {
 		return name;
 	}
