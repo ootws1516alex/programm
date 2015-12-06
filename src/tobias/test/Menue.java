@@ -7,15 +7,7 @@ import java.util.Scanner;
 public class Menue {
 
 	public static void main(String[] args) {
-
-		//starteMenue();
-		
-		//Spielfeld brett = new Spielfeld();
-		//brett.initStein();
-		//brett.zeigeBrett();
-		//System.out.println();
-		//brett.dreheBrett();
-		//brett.zeigeBrett();
+		starteMenue();
 	}
 	
 	public static void starteMenue(){
@@ -25,7 +17,7 @@ public class Menue {
 		int mode;
 		
 		do{
-			System.out.println("Wilkommen bei 'Fear the lady' ");
+			System.out.println("Wilkommen bei 'Fear the walking lady' ");
 			System.out.println("1: Spielen");
 			System.out.println("2: Anleitung lesen");
 			System.out.println("3: Beenden");
@@ -103,9 +95,41 @@ public class Menue {
 		}while(isLegal==false);
 		
 		if(mode==1){
-			//HumanVSAi game = new HumanVSAi(time,color);
+			do{			
+				System.out.print("W‰hlen sie ihre Farbe (1=weiﬂ, 2=schwarz, schwarz beginnt immer): ");
+				isLegal=true;
+				try{
+					scanner = new Scanner(System.in);
+					color = scanner.nextInt();
+				}catch(Exception e){
+					isLegal=false;
+				}finally{
+					System.out.println();
+				}
+				
+				if(color!=1&&color!=2){
+					isLegal=false;
+					}
+			}while(isLegal==false);
+			HumanVSAi game = new HumanVSAi(time,color);
 		}else{
-			//HumanVSHuman game = new HumanVSHuman(time,color);
+			do{			
+				System.out.print("W‰hlen sie ihre Farbe (1=weiﬂ, 2=schwarz, schwarz beginnt immer): ");
+				isLegal=true;
+				try{
+					scanner = new Scanner(System.in);
+					color = scanner.nextInt();
+				}catch(Exception e){
+					isLegal=false;
+				}finally{
+					System.out.println();
+				}
+				
+				if(color!=1&&color!=2){
+					isLegal=false;
+					}
+			}while(isLegal==false);
+			HumanVSHuman game = new HumanVSHuman(time,color);
 		}
 		
 	}

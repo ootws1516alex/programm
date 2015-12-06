@@ -1,5 +1,6 @@
 package tobias.test;
 
+
 public class Spielstein {
 
 	private Koordinate koordinate;
@@ -33,8 +34,8 @@ public class Spielstein {
 		return koordinate;
 	}
 
-	public void setKoordinate(Koordinate koordinate) {
-		this.koordinate = koordinate;
+	public void setKoordinate(Koordinate koordinaten) {
+		this.koordinate = koordinaten;
 	}
 	
 	
