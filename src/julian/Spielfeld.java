@@ -1,4 +1,4 @@
-package tobias.test;
+package julian;
 
 public class Spielfeld {
 

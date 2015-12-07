@@ -1,4 +1,4 @@
-package tobias.test;
+package julian;
 import java.util.Scanner;
 public class HumanVSHuman {
 	
