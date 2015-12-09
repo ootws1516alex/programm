@@ -304,30 +304,46 @@ public class Spielfeld {
 		Spielstein temp;
 		//		koords[aktuellerZug.charAt(0)-'@'-1][aktuellerZug.charAt(1)-'0'-1].getSpielstein().getKoordinate().setX(aktuellerZug.charAt(2)-'@'-1);
 		//		koords[aktuellerZug.charAt(0)-'@'-1][aktuellerZug.charAt(1)-'0'-1].getSpielstein().getKoordinate().setY(aktuellerZug.charAt(3)-'0'-1);
-		if(zug%2==0){
+		if(zug%2==1){
 			temp = koords[xAktuell][yAktuell].getSpielstein();
 			koords[xAktuell][yAktuell].setSpielstein(koords[xSoll][ySoll].getSpielstein());
 			koords[xSoll][ySoll].setSpielstein(temp);
+			
+//			hier muss noch if lady else hin
 			if(xSoll==xAktuell+2){
-				koords[xSoll-1][ ySoll+1].setSpielstein(null);
+				koords[xSoll+2][ ySoll-2].setSpielstein(null);
 				
 			}
 			else if(xSoll==xAktuell-2){
-				koords[xSoll+1][ ySoll+1].setSpielstein(null);
+				koords[xSoll+1][ ySoll-1].setSpielstein(null);
 				
 			}
 
 		}
-		else if(zug%2==1){
+		else if(zug%2==0){
 			temp = koords[5-xAktuell][5-yAktuell].getSpielstein();
 			koords[5-xAktuell][5-yAktuell].setSpielstein(koords[5-xSoll][5-ySoll].getSpielstein());
 			koords[5-xSoll][5-ySoll].setSpielstein(temp);
+			
+			if(koords[5-xSoll][5-ySoll].getSpielstein().isLady()==false){
 			if(5-xSoll==5-xAktuell+2){
-				koords[5-xSoll-1][ 5-ySoll-1].setSpielstein(null);
+				koords[5-xSoll+2][ 5-ySoll-2].setSpielstein(null);
 				
 			}
 			else if(5-xSoll==5-xAktuell-2){
 				koords[5-xSoll+1][ 5-ySoll-1].setSpielstein(null);
+				
+			}
+			}
+			else{
+				if(5-xSoll==5-xAktuell+2||5-xSoll==5-xAktuell+3||5-xSoll==5-xAktuell+4||5-xSoll==5-xAktuell+5){
+					koords[5-xSoll+2][ 5-ySoll-2].setSpielstein(null);
+					
+				}
+				else if(5-xSoll==5-xAktuell-2||5-xSoll==5-xAktuell-3||5-xSoll==5-xAktuell-4||5-xSoll==5-xAktuell-5){
+					koords[5-xSoll+1][ 5-ySoll-1].setSpielstein(null);
+					
+				}
 				
 			}
 
@@ -337,12 +353,13 @@ public class Spielfeld {
 
 	public boolean mussSchlagen(String aktuellerZug, int zug){
 		boolean erg=false;
-		int xAktuell=aktuellerZug.charAt(1)-'0'-1;
-		int yAktuell=aktuellerZug.charAt(0)-'@'-1;
-		int xSoll=aktuellerZug.charAt(3)-'0'-1;
-		int ySoll=aktuellerZug.charAt(2)-'@'-1;
+		int yAktuell=aktuellerZug.charAt(1)-'0'-1;
+		int xAktuell=aktuellerZug.charAt(0)-'@'-1;
+		int ySoll=aktuellerZug.charAt(3)-'0'-1;
+		int xSoll=aktuellerZug.charAt(2)-'@'-1;
 
 		if(zug%2==0){
+			if(isLady(5-xAktuell,5-yAktuell)==false){
 			if(xSoll==xAktuell+2){
 				if((isStein(xAktuell, yAktuell)==true&&(isStein(xSoll, ySoll)==false))&&isStein(xSoll-1, ySoll+1)==true){
 					return true;
@@ -355,11 +372,34 @@ public class Spielfeld {
 					return true;		
 				}
 			}
+			}
+			else{
+				if(xSoll==xAktuell+2||xSoll==xAktuell+3||xSoll==xAktuell+4||xSoll==xAktuell+5){
+					if((isStein(5-xAktuell, 5-yAktuell)==true&&(isStein(5-xSoll, 5-ySoll)==false))&&isStein(5-xSoll+1, 5-ySoll-1)==true){
+						return true;
+					}
+
+
+				}
+				else if(xSoll==xAktuell-2||xSoll==xAktuell-3||xSoll==xAktuell-4||xSoll==xAktuell-5){
+					if((isStein(xAktuell, yAktuell)==true&&(isStein(xSoll, ySoll)==false))&&isStein(xSoll+1, ySoll+1)==true){
+						return true;		
+					}
+				}
+				
+			}
 
 		}
 		else if(zug%2==1){
+			if(xAktuell==3&&yAktuell==0||xAktuell==2&&yAktuell==1){
+				int speicher;
+				speicher=xAktuell;
+				xAktuell=yAktuell;
+				yAktuell=speicher;
+			}
+			if(isLady(xAktuell,yAktuell)==false){
 			if(5-xSoll==5-xAktuell+2){
-				if((isStein(5-xAktuell, 5-yAktuell)==true&&(isStein(5-xSoll, 5-ySoll)==false))&&isStein(5-xSoll-1, 5-ySoll+1)==true){
+				if((isStein(5-xAktuell, 5-yAktuell)==true&&(isStein(5-xSoll, 5-ySoll)==false))&&isStein(5-xSoll+2, 5-ySoll-2)==true){
 					return true;
 				}
 
@@ -368,6 +408,21 @@ public class Spielfeld {
 			else if(5-xSoll==5-xAktuell-2){
 				if((isStein(5-xAktuell, 5-yAktuell)==true&&(isStein(5-xSoll, 5-ySoll)==false))&&isStein(5-xSoll+1, 5-ySoll+1)==true){
 					return true;		
+				}
+			}
+			}
+			else{
+				if(5-xSoll==5-xAktuell+2||5-xSoll==5-xAktuell+3||5-xSoll==5-xAktuell+4||5-xSoll==5-xAktuell+5){
+					if((isStein(5-xAktuell, 5-yAktuell)==true&&(isStein(5-xSoll, 5-ySoll)==false))&&isStein(5-xSoll+2, 5-ySoll-2)==true){
+						return true;
+					}
+
+
+				}
+				else if(5-xSoll==5-xAktuell-2||5-xSoll==5-xAktuell-3||5-xSoll==5-xAktuell-4||5-xSoll==5-xAktuell-5){
+					if((isStein(5-xAktuell, 5-yAktuell)==true&&(isStein(5-xSoll, 5-ySoll)==false))&&isStein(5-xSoll+1, 5-ySoll+1)==true){
+						return true;		
+					}
 				}
 			}
 
