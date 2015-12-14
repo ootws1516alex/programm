@@ -5,7 +5,7 @@ public class Spieler {
 	String name;
 	char farbe;
 	
-	public Spieler(String name,char farbe){
+	public Spieler(String name,char farbe,boolean spielerNr){
 		this.name=name;
 		this.farbe=farbe;
 	}

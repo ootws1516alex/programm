@@ -6,6 +6,8 @@ public class Spielfeld {
 
 	private Koordinate[][] koords;
 	private Spielstein[] steine;
+	private ArrayList<Spielstein> wSteine;
+	private ArrayList<Spielstein> sSteine;
 	
 	public Spielfeld(){
 		this.setKoords(this.initFeld());
@@ -68,6 +70,30 @@ public class Spielfeld {
 		this.koords[5][0].setSpielstein(steine[9]=new Spielstein(koords[5][0],color1, true));
 		this.koords[5][2].setSpielstein(steine[10]=new Spielstein(koords[5][2],color1, false));
 		this.koords[5][4].setSpielstein(steine[11]=new Spielstein(koords[5][4],color1, false));
+		
+		for(int i=0;i<6;i++){
+			wSteine.add(steine[i]);
+		}
+		for(int i=6;i<12;i++){
+			sSteine.add(steine[i]);
+		}
+		
+	}
+
+	public ArrayList<Spielstein> getwSteine() {
+		return wSteine;
+	}
+
+	public void setwSteine(ArrayList<Spielstein> wSteine) {
+		this.wSteine = wSteine;
+	}
+
+	public ArrayList<Spielstein> getsSteine() {
+		return sSteine;
+	}
+
+	public void setsSteine(ArrayList<Spielstein> sSteine) {
+		this.sSteine = sSteine;
 	}
 
 	public Koordinate[][] getKoords() {
