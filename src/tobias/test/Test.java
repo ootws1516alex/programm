@@ -5,9 +5,10 @@ public class Test {
 
 	public static void main(String[] args) {
 		Spielfeld s=new Spielfeld();
-		s.zeigeBrett();
-		s.dreheBrett();
-		s.zeigeBrett();
+		Ausgabe a= new Ausgabe(s.getKoords());
+		//a.zeigeBrett();
+		//a.zeigeGedrehtesBrett();
+		HumanVSHuman hu = new HumanVSHuman(100,1);
 	}
 	
 }
