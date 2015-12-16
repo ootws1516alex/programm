@@ -6,7 +6,7 @@ public class Koordinate {
 	private int x,y;
 	private Spielstein spielstein;
 	
-	public Koordinate(int x, int y, String name){
+	public Koordinate(int y, int x, String name){
 		this.x = x;
 		this.y = y;
 		this.setName(name);

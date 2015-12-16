@@ -19,11 +19,12 @@ public class HumanVSHuman {
 		this.time = time;
 		this.color = color;
 		initGame();
-		startGame();
+		runGame();
 	}
-	public int getTime() {
-		return time;
-	}
+	
+	/**
+	 * holt sich benötigte daten aus der Klasse Spielfeld und erzeugt eine neues ausgabe Objekt
+	 */
 	public void initGame() {
 		spielfeld = new Spielfeld();
 		this.koords = spielfeld.getKoords();
@@ -31,7 +32,10 @@ public class HumanVSHuman {
 		this.sSteine=spielfeld.getsSteine();
 		this.ausgabe = new Ausgabe(koords);
 	}
-	public void startGame() {
+	/**
+	 * Spiellogik bzw. rundenlogik
+	 */
+	public void runGame() {
 		Scanner scanner;
 		String aktuellerZug;
 		System.out.println("Das Spielfeld wurde erzeugt");
@@ -69,7 +73,6 @@ public class HumanVSHuman {
 					aktuellerZug = scanner.nextLine();
 					aktuellerZug = aktuellerZug.toUpperCase();
 				}	
-	
 				geschlagen=bewegen(aktuellerZug,runde);
 			
 				if(geschlagen==true){
@@ -104,23 +107,40 @@ public class HumanVSHuman {
 			setExit=isFinished(aufgabe1,aufgabe2);			
 			runde++;
 		} while (setExit == false);
-		
+		System.out.println(whoWon(aufgabe1,aufgabe2));
+	}
+	/**
+	 * gibt in einem Sting zurück wer gewonnen hat bzw ob das spiel unentschieden ausging. 
+	 * Falls das spiel noch läuft wird NULL zurückgegeben
+	 * @param aufgabe1
+	 * @param aufgabe2
+	 * @return
+	 */
+	public String whoWon(boolean aufgabe1,boolean aufgabe2){
 		if(wSteine.size()==0){
-			System.out.println(spieler1.getName()+" hat das Spiel gewonnen");
+			return (spieler1.getName()+" hat das Spiel gewonnen");
 		}
 		if(sSteine.size()==0){
-			System.out.println(spieler2.getName()+" hat das Spiel gewonnen");
+			return (spieler2.getName()+" hat das Spiel gewonnen");
 		}
 		if(sSteine.size()==1&&wSteine.size()==1){
-			System.out.println("Das Spiel geht unentschieden aus");
+			return ("Das Spiel geht unentschieden aus");
 		}
 		if(aufgabe1==true){
-			System.out.println(spieler2.getName()+" hat das Spiel gewonnen");
+			return (spieler2.getName()+" hat das Spiel gewonnen");
 		}
 		if(aufgabe2==true){
-			System.out.println(spieler1.getName()+" hat das Spiel gewonnen");
+			return (spieler1.getName()+" hat das Spiel gewonnen");
+		}else{
+			return ("Das Spiel läuft noch!");
 		}
 	}
+	/**
+	 * Überprüft ob das spiel noch läuft und gibt ein boolean zurück
+	 * @param aufgabe1
+	 * @param aufgabe2
+	 * @return
+	 */
 	public boolean isFinished(boolean aufgabe1, boolean aufgabe2){
 		if(wSteine.size()==0||sSteine.size()==0){
 			return true;
@@ -136,20 +156,38 @@ public class HumanVSHuman {
 		}
 		return false;
 	}
+	
+	/**
+	 * entfernt falls nötig einen zufälligen stein
+	 * @param runde
+	 */
 	private void removeRandomStein(int runde){
 		int random=10;
-		if(runde%2==0){
+		Spielstein toRemove;
+		if(runde%2==1){
 			while(random>wSteine.size()-1){
 				random=(int)Math.random()*10;
 			}
-			wSteine.remove(random);
+			toRemove=wSteine.get(random);
+			toRemove.getKoordinate().setSpielstein(null);
+			toRemove.setKoordinate(null);
+			wSteine.remove(toRemove);
 		}else{
 			while(random>sSteine.size()-1){
 				random=(int)Math.random()*10;
 			}
-			sSteine.remove(random);
+			toRemove=sSteine.get(random);
+			toRemove.getKoordinate().setSpielstein(null);
+			toRemove.setKoordinate(null);
+			sSteine.remove(toRemove);
 		}
 	}
+	
+	/**
+	 * prüft ob eingabe korrekt ist
+	 * @param aktuellerZug
+	 * @return
+	 */
 	private boolean pruefeAufgueltigeKoord(String aktuellerZug) {
 		if (aktuellerZug.length() != 4) {
 			return false;
@@ -168,6 +206,12 @@ public class HumanVSHuman {
 		}
 		return true;
 	}
+	/**
+	 * bewegt einen Stein
+	 * @param aktuellerZug
+	 * @param zug
+	 */
+	
 	public void ziehen(String aktuellerZug, int zug) {
 		Spielstein temp;
 		
@@ -182,6 +226,13 @@ public class HumanVSHuman {
 		koords[ySoll][xSoll].setSpielstein(temp);		
 		temp.setKoordinate(koords[ySoll][xSoll]);
 	}
+	/**
+	 * Wird als erstes aufgerufen und ruft dann alle anderen nötigen methoden auf 
+	 * um einen zug korrekt durchzuführen. Gibt geschlagenen stein zurück
+	 * @param aktuellerZug
+	 * @param runde
+	 * @return
+	 */
 	private boolean bewegen(String aktuellerZug, int runde){
 		Spielstein geschlagener=null;
 		geschlagener=schlagen(aktuellerZug,runde);
@@ -189,19 +240,23 @@ public class HumanVSHuman {
 		if(geschlagener!=null){
 			ziehen(aktuellerZug,runde);
 		}else{
-			if(mussSchlagen(aktuellerZug,runde)==true){
+			System.out.println(mussSchlagen(runde));
+			if(mussSchlagen(runde)==true){
 				removeRandomStein(runde);
 			}else{
 				ziehen(aktuellerZug,runde);
 			}
 		}
-		checkIfNewLady();
+		makeNewLady();
 		if(geschlagener!=null){
 			return true;
 		}
 		return false;
 	}
-	public void checkIfNewLady(){
+	/**
+	 * Wandelt alle Steine am Gegnerischen Rand zu Ladies um
+	 */
+	public void makeNewLady(){
 		for(int i=0;i<wSteine.size();i++){
 			System.out.println();
 			if(wSteine.get(i).getKoordinate().equals(koords[5][0])||wSteine.get(i).getKoordinate().equals(koords[5][2])
@@ -216,6 +271,12 @@ public class HumanVSHuman {
 			}
 		}
 	}
+	/**
+	 * Checkt ob ein Stein geschlagen wurde und gibt diesen zurück. Wurde keinn Stein geschlagen wird NULL zurückgegeben.
+	 * @param aktuellerZug
+	 * @param runde
+	 * @return
+	 */
 	private Spielstein schlagen(String aktuellerZug, int runde) {
 
 		int yAktuell = aktuellerZug.charAt(1) - '0' - 1;
@@ -276,21 +337,198 @@ public class HumanVSHuman {
 		}
 		return geschlagener;
 	}
-	public boolean mussSchlagen(String aktuellerZug, int runde) {
+	
+	/**
+	 * Überprüft ob schlagpflicht verletzt wurde und gibt dann true zurück, ansonsten false
+	 * @param runde
+	 * @return
+	 */
+	public boolean mussSchlagen(int runde) {
 
-		int yAktuell = aktuellerZug.charAt(1) - '0' - 1;
-		int xAktuell = aktuellerZug.charAt(0) - '@' - 1;
-		int ySoll = aktuellerZug.charAt(3) - '0' - 1;
-		int xSoll = aktuellerZug.charAt(2) - '@' - 1;
-		int x,y,z;
-		Spielstein aktuellerStein;
-	
+		int yAktuell = 0;
+		int xAktuell = 0;
 		
-		
-		
-	
+		if(runde%2==0){
+			for(int i=0;i<sSteine.size();i++){
+				if(sSteine.get(i).isLady()==true){
+					yAktuell=sSteine.get(i).getKoordinate().getY();
+					xAktuell=sSteine.get(i).getKoordinate().getX();
+					int j=xAktuell+1;
+					for(int k=yAktuell-1;k>0&&j<5;k--){
+						if(koords[k][j].getSpielstein()!=null){
+							if(koords[k][j].getSpielstein().getColor()=='s'){
+								break;
+							}
+							if(koords[k][j].getSpielstein().getColor()=='w'){
+								if(koords[k-1][j+1].getSpielstein()==null){
+									return true;	
+								}
+							}
+						}
+						j++;
+					}
+					j=xAktuell-1;
+					for(int k=yAktuell-1;k>0&&j>0;k--){
+						if(koords[k][j].getSpielstein()!=null){
+							if(koords[k][j].getSpielstein().getColor()=='s'){
+								break;
+							}
+							if(koords[k][j].getSpielstein().getColor()=='w'){
+								if(koords[k-1][j-1].getSpielstein()==null){
+									return true;	
+								}
+							}
+						}
+						j--;
+					}
+					j=xAktuell-1;
+					for(int k=yAktuell+1;k<5&&j>0;k++){
+						System.out.println("Y: "+koords[k][j].getY()+"X: "+koords[k][j].getX());
+						if(koords[k][j].getSpielstein()!=null){
+							if(koords[k][j].getSpielstein().getColor()=='s'){
+								break;
+							}
+							if(koords[k][j].getSpielstein().getColor()=='w'){
+								if(koords[k+1][j-1].getSpielstein()==null){
+									return true;	
+								}
+							}
+						}
+						j--;
+					}
+					j=xAktuell+1;
+					for(int k=yAktuell+1;k<5&&j<5;k++){
+						if(koords[k][j].getSpielstein()!=null){
+							if(koords[k][j].getSpielstein().getColor()=='s'){
+								break;
+							}
+							if(koords[k][j].getSpielstein().getColor()=='w'){
+								if(koords[k+1][j+1].getSpielstein()==null){
+									return true;	
+								}
+							}
+						}
+						j++;
+					}	
+				}else{
+					yAktuell=sSteine.get(i).getKoordinate().getY();
+					xAktuell=sSteine.get(i).getKoordinate().getX();
+					if(yAktuell>1&&xAktuell>1){
+						if(koords[yAktuell-1][xAktuell-1].getSpielstein()!=null){
+							if(koords[yAktuell-1][xAktuell-1].getSpielstein().getColor()=='w'){
+								if(koords[yAktuell-2][xAktuell-2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
+					}	
+					if(yAktuell>1&&xAktuell<4){
+						if(koords[yAktuell-1][xAktuell+1].getSpielstein()!=null){
+							if(koords[yAktuell-1][xAktuell+1].getSpielstein().getColor()=='w'){
+								if(koords[yAktuell-2][xAktuell+2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
+					}		
+				}	
+			}
+		}
+		if(runde%2==1){
+			for(int i=0;i<wSteine.size();i++){
+				if(wSteine.get(i).isLady()==true){
+					yAktuell=wSteine.get(i).getKoordinate().getY();
+					xAktuell=wSteine.get(i).getKoordinate().getX();
+					int j=xAktuell+1;
+					for(int k=yAktuell-1;k>0&&j<5;k--){
+						if(koords[k][j].getSpielstein()!=null){
+							if(koords[k][j].getSpielstein().getColor()=='w'){
+								break;
+							}
+							if(koords[k][j].getSpielstein().getColor()=='s'){
+								if(koords[k-1][j+1].getSpielstein()==null){
+									return true;	
+								}
+							}
+						}
+						j++;
+					}
+					j=xAktuell-1;
+					for(int k=yAktuell-1;k>0&&j>0;k--){
+						if(koords[k][j].getSpielstein()!=null){
+							if(koords[k][j].getSpielstein().getColor()=='w'){
+								break;
+							}
+							if(koords[k][j].getSpielstein().getColor()=='s'){
+								if(koords[k-1][j-1].getSpielstein()==null){
+									return true;	
+								}
+							}
+						}
+						j--;
+					}
+					j=xAktuell-1;
+					for(int k=yAktuell+1;k<5&&j>0;k++){
+						if(koords[k][j].getSpielstein()!=null){
+							if(koords[k][j].getSpielstein().getColor()=='w'){
+								break;
+							}
+							if(koords[k][j].getSpielstein().getColor()=='s'){
+								if(koords[k+1][j-1].getSpielstein()==null){
+									return true;	
+								}
+							}
+						}
+						j--;
+					}
+					j=xAktuell+1;
+					for(int k=yAktuell+1;k<5&&j<5;k++){
+						if(koords[k][j].getSpielstein()!=null){
+							if(koords[k][j].getSpielstein().getColor()=='w'){
+								break;
+							}
+							if(koords[k][j].getSpielstein().getColor()=='s'){
+								if(koords[k+1][j+1].getSpielstein()==null){
+									return true;	
+								}
+							}
+						}
+						j++;
+					}	
+				}else{
+					yAktuell=wSteine.get(i).getKoordinate().getY();
+					xAktuell=wSteine.get(i).getKoordinate().getX();
+					if(yAktuell<4&&xAktuell>1){
+						if(koords[yAktuell+1][xAktuell-1].getSpielstein()!=null){
+							if(koords[yAktuell+1][xAktuell-1].getSpielstein().getColor()=='s'){
+								if(koords[yAktuell+2][xAktuell-2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
+					}	
+					if(yAktuell<4&&xAktuell<4){
+						if(koords[yAktuell+1][xAktuell+1].getSpielstein()!=null){
+							if(koords[yAktuell+1][xAktuell+1].getSpielstein().getColor()=='s'){
+								if(koords[yAktuell+2][xAktuell+2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
+					}		
+				}	
+			}
+		}
 		return false;
 	}
+	
+	/**
+	 * Überpfrüft nach erstem schlagen ob ein zweites schlagen korrekt eingegeben wurde
+	 * @param aktuellerZug
+	 * @param zweiterZug
+	 * @param runde
+	 * @return
+	 */
 	public boolean richtigerZweitZug(String aktuellerZug,String zweiterZug, int runde) {
 
 		int y1 = aktuellerZug.charAt(3) - '0' - 1;
@@ -319,6 +557,13 @@ public class HumanVSHuman {
 		}
 		return false;
 	}
+	/**
+	 * Überprüft ob ein eingegebener Zug möglich ist
+	 * @param aktuellerZug
+	 * @param runde
+	 * @return
+	 */
+	
 	public boolean richtigerZug(String aktuellerZug, int runde){
 		
 		int xAktuell = aktuellerZug.charAt(1) - '0' - 1;
