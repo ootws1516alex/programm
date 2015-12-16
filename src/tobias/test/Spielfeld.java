@@ -55,28 +55,37 @@ public class Spielfeld {
 
 		char color1,color2;
 
+		sSteine=new ArrayList<Spielstein>();
+		wSteine=new ArrayList<Spielstein>();
+		
 		color1='s';
 		color2='w';
 		steine=new Spielstein[12];
-		this.koords[0][1].setSpielstein(steine[0]=new Spielstein(koords[0][1],color2, false));
-		this.koords[0][3].setSpielstein(steine[1]=new Spielstein(koords[0][3],color2, false));
-		this.koords[0][5].setSpielstein(steine[2]=new Spielstein(koords[0][5],color2, true));
-		this.koords[1][0].setSpielstein(steine[3]=new Spielstein(koords[1][0],color2, false));
-		this.koords[1][2].setSpielstein(steine[4]=new Spielstein(koords[1][2],color2, false));
-		this.koords[1][4].setSpielstein(steine[5]=new Spielstein(koords[1][4],color2, false));
-		this.koords[4][1].setSpielstein(steine[6]=new Spielstein(koords[4][1],color1, false));
-		this.koords[4][3].setSpielstein(steine[7]=new Spielstein(koords[4][3],color1, false));
-		this.koords[4][5].setSpielstein(steine[8]=new Spielstein(koords[4][5],color1, false));
-		this.koords[5][0].setSpielstein(steine[9]=new Spielstein(koords[5][0],color1, true));
-		this.koords[5][2].setSpielstein(steine[10]=new Spielstein(koords[5][2],color1, false));
-		this.koords[5][4].setSpielstein(steine[11]=new Spielstein(koords[5][4],color1, false));
+		this.koords[0][1].setSpielstein(new Spielstein(koords[0][1],color2, false));
+		this.koords[0][3].setSpielstein(new Spielstein(koords[0][3],color2, false));
+		this.koords[0][5].setSpielstein(new Spielstein(koords[0][5],color2, true));
+		this.koords[1][0].setSpielstein(new Spielstein(koords[1][0],color2, false));
+		this.koords[1][2].setSpielstein(new Spielstein(koords[1][2],color2, false));
+		this.koords[1][4].setSpielstein(new Spielstein(koords[1][4],color2, false));
+		this.koords[4][1].setSpielstein(new Spielstein(koords[4][1],color1, false));
+		this.koords[4][3].setSpielstein(new Spielstein(koords[4][3],color1, false));
+		this.koords[4][5].setSpielstein(new Spielstein(koords[4][5],color1, false));
+		this.koords[5][0].setSpielstein(new Spielstein(koords[5][0],color1, true));
+		this.koords[5][2].setSpielstein(new Spielstein(koords[5][2],color1, false));
+		this.koords[5][4].setSpielstein(new Spielstein(koords[5][4],color1, false));
 		
-		for(int i=0;i<6;i++){
-			wSteine.add(steine[i]);
-		}
-		for(int i=6;i<12;i++){
-			sSteine.add(steine[i]);
-		}
+		wSteine.add(this.koords[0][1].getSpielstein());
+		wSteine.add(this.koords[0][3].getSpielstein());
+		wSteine.add(this.koords[0][5].getSpielstein());
+		wSteine.add(this.koords[1][0].getSpielstein());
+		wSteine.add(this.koords[1][2].getSpielstein());
+		wSteine.add(this.koords[1][4].getSpielstein());
+		sSteine.add(this.koords[4][1].getSpielstein());
+		sSteine.add(this.koords[4][3].getSpielstein());
+		sSteine.add(this.koords[4][5].getSpielstein());
+		sSteine.add(this.koords[5][0].getSpielstein());
+		sSteine.add(this.koords[5][2].getSpielstein());
+		sSteine.add(this.koords[5][4].getSpielstein());
 		
 	}
 

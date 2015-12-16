@@ -113,22 +113,22 @@ public class Menue {
 			}while(isLegal==false);
 			HumanVSAi game = new HumanVSAi(time,color);
 		}else{
-			do{			
-				System.out.print("W‰hlen sie ihre Farbe (1=weiﬂ, 2=schwarz, schwarz beginnt immer): ");
-				isLegal=true;
-				try{
-					scanner = new Scanner(System.in);
-					color = scanner.nextInt();
-				}catch(Exception e){
-					isLegal=false;
-				}finally{
-					System.out.println();
-				}
+			//do{			
+			//	System.out.print("W‰hlen sie ihre Farbe (1=weiﬂ, 2=schwarz, schwarz beginnt immer): ");
+				//isLegal=true;
+			//	try{
+			//		scanner = new Scanner(System.in);
+			//		color = scanner.nextInt();
+			//	}catch(Exception e){
+			//		isLegal=false;
+			//	}finally{
+			//		System.out.println();
+			//	}
 				
-				if(color!=1&&color!=2){
-					isLegal=false;
-					}
-			}while(isLegal==false);
+			//	if(color!=1&&color!=2){
+			//		isLegal=false;
+			//		}
+			//}while(isLegal==false);
 			HumanVSHuman game = new HumanVSHuman(time,color);
 		}
 		
