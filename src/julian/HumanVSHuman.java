@@ -36,6 +36,7 @@ public class HumanVSHuman {
 			int spielZug=0;
 			boolean setExit=false;
 			boolean isLegit=true;
+			boolean geschlagen;
 			do{
 				do{
 				if(spielZug%2==0){
@@ -47,6 +48,7 @@ public class HumanVSHuman {
 						Scanner scanner = new Scanner(System.in);
 						String aktuellerZug = scanner.nextLine();
 						aktuellerZug=aktuellerZug.toUpperCase();
+						geschlagen=spielfeld.hatGeschlagen(aktuellerZug, spielZug);
 					
 						if(!pruefeAufgueltigeKoord(aktuellerZug)){
 							isLegit=false;
@@ -54,9 +56,7 @@ public class HumanVSHuman {
 							spielZug--;
 							spielfeld.dreheBrett();
 						}
-						else if(spielfeld.richtigerZug(aktuellerZug, spielZug)==false&&spielfeld.mussSchlagen(aktuellerZug, spielZug)==false){
-
-//						else if(spielfeld.richtigerZug(aktuellerZug, spielZug)==false){
+						else if(spielfeld.richtigerZug(aktuellerZug, spielZug)==false&&geschlagen==false){
 							System.out.println(spielfeld.richtigerZug(aktuellerZug,spielZug));
 							System.out.println(spielZug);
 							isLegit=false;
@@ -69,6 +69,46 @@ public class HumanVSHuman {
 							spielfeld.ziehen(aktuellerZug, spielZug);
 					}
 						spielfeld.zeigeBrett();
+						if(geschlagen==true){
+						while(!aktuellerZug.equals("NEIN")){
+							System.out.println("Sie haben einen gegnerischen Stein geschlagen, wenn Sie einen weiteren Stein schlagen möchten geben Sie die Koordinaten ein, ansonsten schreiben Sie NEIN");
+							
+								String alterAktZug=aktuellerZug;
+								aktuellerZug = scanner.nextLine();
+								aktuellerZug=aktuellerZug.toUpperCase();
+								if(!aktuellerZug.equals("NEIN")){
+								if(!pruefeAufgueltigeKoord(aktuellerZug)){
+									System.out.println("ungültige Koordinaten, bitte gültige Koordinaten eingeben (zb. B5C4)");
+									spielfeld.dreheBrett();
+									aktuellerZug=alterAktZug;
+								}	
+								else if(alterAktZug.charAt(2)!=aktuellerZug.charAt(0)||alterAktZug.charAt(3)!=aktuellerZug.charAt(1)){
+									System.out.println("Sie können nur mit dem gleichen Stein schlagen, mit dem Sie zuvor geschlagen haben");
+									spielfeld.dreheBrett();
+									aktuellerZug=alterAktZug;
+								}
+									
+								
+								
+								else if(spielfeld.hatGeschlagen(aktuellerZug, spielZug)==false){
+									System.out.println(spielfeld.richtigerZug(aktuellerZug,spielZug));
+									System.out.println(spielZug);
+									System.out.println("ungültiger Zug, bitte Koordinaten erneut eingeben (zb. B5C4)");
+									spielfeld.dreheBrett();
+									aktuellerZug=alterAktZug;
+									
+								}
+								else{
+									spielfeld.ziehen(aktuellerZug, spielZug);
+							}
+								spielfeld.zeigeBrett();
+								spielfeld.dreheBrett();
+								spielfeld.zeigeBrett();
+							
+								}
+								}
+						}
+						
 						spielfeld.dreheBrett();
 						spielfeld.zeigeBrett();
 						
@@ -85,11 +125,6 @@ public class HumanVSHuman {
 			
 			
 		}
-
-//		private boolean pruefeAufgueltigenZug(String aktuellerZug) {
-//			// TODO Auto-generated method stub
-//			return true;
-//		}
 
 		private boolean pruefeAufgueltigeKoord(String aktuellerZug) {
 			if(aktuellerZug.length()!=4){
