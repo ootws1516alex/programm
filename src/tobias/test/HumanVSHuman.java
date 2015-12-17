@@ -49,6 +49,7 @@ public class HumanVSHuman {
 		boolean aufgabe1 = false;
 		boolean aufgabe2 = false;
 		boolean geschlagen=false;
+		boolean legitZug=false;
 		
 		do{	
 			if(runde%2 == 0){
@@ -62,55 +63,74 @@ public class HumanVSHuman {
 			} else {
 				System.out.println(spieler2.getName()+ " ist am Zug, gib die Koordinaten für deinen Spielzug ein. (zb. B5C4) oder 'AUFGEBEN' zum aufgeben");
 			}
-
-			scanner = new Scanner(System.in);
-			aktuellerZug = scanner.nextLine();
-			aktuellerZug = aktuellerZug.toUpperCase();
-			if(!aktuellerZug.equals("AUFGEBEN")){
-				while(pruefeAufgueltigeKoord(aktuellerZug)==false||richtigerZug(aktuellerZug, runde)==false) {	
-					System.out.println("Ungültige Koordinaten bzw. ungültiger Zug. Bitte gültige Koordinaten eingeben (zb. B5C4)");
+				legitZug=false;
+				do{
+					
 					scanner = new Scanner(System.in);
 					aktuellerZug = scanner.nextLine();
 					aktuellerZug = aktuellerZug.toUpperCase();
-				}	
-				geschlagen=bewegen(aktuellerZug,runde);
-			
-				if(geschlagen==true){
-					System.out.println("Weiteren Steine schlagen? Gültige Koordinaten oder 'NEIN' eigeben:");
-					scanner = new Scanner(System.in);
-					String zweiterZug;
-					boolean exit=false;
-					zweiterZug = scanner.nextLine();
-					zweiterZug = aktuellerZug.toUpperCase();
-				
-					while(pruefeAufgueltigeKoord(zweiterZug)==false||richtigerZweitZug(aktuellerZug, zweiterZug, runde)==false) {	
-						System.out.println("Ungültige Koordinaten bzw. ungültiger Zug. Bitte gültige Koordinaten oder'NEIN' eingeben");
-						scanner = new Scanner(System.in);
-						zweiterZug = scanner.nextLine();
-						zweiterZug = zweiterZug.toUpperCase();
+					
+					if(!aktuellerZug.equals("AUFGEBEN")){
+						if(pruefeAufgueltigeKoord(aktuellerZug)==false) {	
+							System.out.println("Ungültige Koordinaten. Bitte gültige Koordinaten eingeben (zb. B5C4)!");
+						}else if(richtigerZug(aktuellerZug, runde)==false){
+							System.out.println("Ungültiger Zug. Bitte gültigen Zug eingeben!");
+							legitZug=false;
+						}else{
+							legitZug=true;
+						}
+					}else{
+						break;
 					}
+					
+				}while(legitZug==false||pruefeAufgueltigeKoord(aktuellerZug)==false);
+				if(!aktuellerZug.equals("AUFGEBEN")){
+					
+					geschlagen=bewegen(aktuellerZug,runde);
+		
+					if(geschlagen==true){
+						System.out.println("Weiteren Steine schlagen? Gültige Koordinaten oder 'NEIN' eigeben:");
+						String zweiterZug;
+						boolean exit=false;
+						legitZug=false;
 				
-					if(zweiterZug.equals("NEIN")){
-						exit=true;
+						do{	
+							scanner = new Scanner(System.in);
+							zweiterZug = scanner.nextLine();
+							zweiterZug = zweiterZug.toUpperCase();
+							if(!zweiterZug.equals("NEIN")){
+								if(pruefeAufgueltigeKoord(zweiterZug)==false){
+									System.out.println("Ungültige Koordinaten. Bitte gültige Koordinaten oder 'NEIN' eingeben");
+								}else if(richtigerZweitZug(aktuellerZug,zweiterZug,runde)==false){
+									System.out.println("Ungültiger Zug. Bitte gültigen Zug oder 'NEIN' eingeben");
+								}else{
+									legitZug=true;
+								}
+							}else{
+								exit=true;
+								break;
+							}
+								
+						}while((richtigerZweitZug(aktuellerZug,zweiterZug,runde)==false||pruefeAufgueltigeKoord(zweiterZug)==false));
+						if(exit==false){
+							bewegen(zweiterZug,runde);
+						}
 					}
-					if(exit==false){
-						bewegen(zweiterZug,runde);
+				}else{
+					if(aktuellerZug.equals("AUFGEBEN")&&runde%2==0){
+						aufgabe1=true;
+					}
+					if(aktuellerZug.equals("AUFGEBEN")&&runde%2==1){
+						aufgabe2=true;
 					}
 				}
-			}
-			if(aktuellerZug.equals("AUFGEBEN")&&runde%2==0){
-				aufgabe1=true;
-			}
-			if(aktuellerZug.equals("AUFGEBEN")&&runde%2==1){
-				aufgabe2=true;
-			}
 			setExit=isFinished(aufgabe1,aufgabe2);			
 			runde++;
 		} while (setExit == false);
 		System.out.println(whoWon(aufgabe1,aufgabe2));
 	}
 	/**
-	 * gibt in einem Sting zurück wer gewonnen hat bzw ob das spiel unentschieden ausging. 
+	 * gibt in einem String zurück wer gewonnen hat bzw ob das spiel unentschieden ausging. 
 	 * Falls das spiel noch läuft wird NULL zurückgegeben
 	 * @param aufgabe1
 	 * @param aufgabe2
@@ -179,7 +199,7 @@ public class HumanVSHuman {
 			toRemove=sSteine.get(random);
 			toRemove.getKoordinate().setSpielstein(null);
 			toRemove.setKoordinate(null);
-			sSteine.remove(toRemove);
+			sSteine.remove(toRemove);	
 		}
 	}
 	
@@ -228,7 +248,7 @@ public class HumanVSHuman {
 	}
 	/**
 	 * Wird als erstes aufgerufen und ruft dann alle anderen nötigen methoden auf 
-	 * um einen zug korrekt durchzuführen. Gibt geschlagenen stein zurück
+	 * um einen zug korrekt durchzuführen. Gibt zurück ob ein stein geschlagen wurde
 	 * @param aktuellerZug
 	 * @param runde
 	 * @return
@@ -240,7 +260,6 @@ public class HumanVSHuman {
 		if(geschlagener!=null){
 			ziehen(aktuellerZug,runde);
 		}else{
-			System.out.println(mussSchlagen(runde));
 			if(mussSchlagen(runde)==true){
 				removeRandomStein(runde);
 			}else{
@@ -258,7 +277,6 @@ public class HumanVSHuman {
 	 */
 	public void makeNewLady(){
 		for(int i=0;i<wSteine.size();i++){
-			System.out.println();
 			if(wSteine.get(i).getKoordinate().equals(koords[5][0])||wSteine.get(i).getKoordinate().equals(koords[5][2])
 					||wSteine.get(i).getKoordinate().equals(koords[5][4])){
 				wSteine.get(i).setLady(true);
@@ -383,7 +401,6 @@ public class HumanVSHuman {
 					}
 					j=xAktuell-1;
 					for(int k=yAktuell+1;k<5&&j>0;k++){
-						System.out.println("Y: "+koords[k][j].getY()+"X: "+koords[k][j].getX());
 						if(koords[k][j].getSpielstein()!=null){
 							if(koords[k][j].getSpielstein().getColor()=='s'){
 								break;
