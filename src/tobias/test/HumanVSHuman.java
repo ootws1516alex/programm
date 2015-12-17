@@ -55,8 +55,7 @@ public class HumanVSHuman {
 			if(runde%2 == 0){
 				ausgabe.zeigeBrett();
 			}else{
-				//ausgabe.zeigeGedrehtesBrett();
-				ausgabe.zeigeBrett();
+				ausgabe.zeigeGedrehtesBrett();
 			}
 			if (runde % 2 == 0) {
 				System.out.println(spieler1.getName()+ " ist am Zug, gib die Koordinaten für deinen Spielzug ein. (zb. B5C4) oder 'AUFGEBEN' zum aufgeben ");
@@ -89,6 +88,12 @@ public class HumanVSHuman {
 					geschlagen=bewegen(aktuellerZug,runde);
 		
 					if(geschlagen==true){
+						if(runde%2==0){
+							ausgabe.zeigeBrett();
+						}else{
+							ausgabe.zeigeGedrehtesBrett();
+						}
+						
 						System.out.println("Weiteren Steine schlagen? Gültige Koordinaten oder 'NEIN' eigeben:");
 						String zweiterZug;
 						boolean exit=false;
