@@ -75,7 +75,9 @@ public abstract class Spiellogik {
 			return (spieler2.getName()+" hat das Spiel gewonnen");
 		}
 		if(sSteine.size()==1&&wSteine.size()==1){
-			return ("Das Spiel geht unentschieden aus");
+			if(sSteine.get(0).isLady()==true&&wSteine.get(0).isLady()==true){
+				return ("Das Spiel geht unentschieden aus");
+			}
 		}
 		if(aufgabe1==true){
 			return (spieler2.getName()+" hat das Spiel gewonnen");
@@ -98,7 +100,9 @@ public abstract class Spiellogik {
 			return true;
 		}
 		if(wSteine.size()==1&&sSteine.size()==1){
-			return true;
+			if(wSteine.get(0).isLady()==true&&sSteine.get(0).isLady()==true){
+				return true;
+			}
 		}
 		if(aufgabe1==true){
 			return true;

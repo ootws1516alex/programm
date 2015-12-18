@@ -87,7 +87,8 @@ public class HumanVSHuman extends Spiellogik{
 							getAusgabe().zeigeGedrehtesBrett();
 						}
 						
-						System.out.println("Weiteren Steine schlagen? Gültige Koordinaten oder 'NEIN' eigeben:");
+						System.out.print("Sie haben einen Stein geschlagen. Weiteren Steine schlagen? ");
+						System.out.println("Gültige Koordinaten oder 'NEIN' eigeben:");
 						String zweiterZug;
 						boolean exit=false;
 						legitZug=false;
@@ -98,9 +99,10 @@ public class HumanVSHuman extends Spiellogik{
 							zweiterZug = zweiterZug.toUpperCase();
 							if(!zweiterZug.equals("NEIN")){
 								if(pruefeAufgueltigeKoord(zweiterZug)==false){
-									System.out.println("Ungültige Koordinaten. Bitte gültige Koordinaten oder 'NEIN' eingeben");
+									System.out.println("Ungültige Koordinaten. Bitte gültige Koordinaten oder 'NEIN' eingeben");	
 								}else if(richtigerZweitZug(aktuellerZug,zweiterZug,runde)==false){
 									System.out.println("Ungültiger Zug. Bitte gültigen Zug oder 'NEIN' eingeben");
+									legitZug=false;
 								}else{
 									legitZug=true;
 								}
@@ -109,7 +111,7 @@ public class HumanVSHuman extends Spiellogik{
 								break;
 							}
 								
-						}while((richtigerZweitZug(aktuellerZug,zweiterZug,runde)==false||pruefeAufgueltigeKoord(zweiterZug)==false));
+						}while((legitZug==false||pruefeAufgueltigeKoord(zweiterZug)==false));
 						if(exit==false){
 							bewegen(zweiterZug,runde);
 						}
