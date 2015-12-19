@@ -2,29 +2,30 @@ package tobias.test;
 
 import java.util.Scanner;
 
-public class HumanVSAi {
+public class HumanVSAi extends Spiellogik {
 
-	private int color;
 	private int time;
 	Spielfeld spielfeld;
 	Spieler spieler1;
 	Spieler spieler2;
 	
 	public HumanVSAi(int time, int color){
-		this.time=time;
-		this.color=color;
+		setTime(time);
 		initGame();
-		startGame();
-	}
-
-	public int getTime() {
-		return time;
+		runGame();
 	}
 	
 	public void initGame(){
-		
+		spielfeld = new Spielfeld();
+		setKoords(spielfeld.getKoords());
+		setwSteine(spielfeld.getwSteine());
+		setsSteine(spielfeld.getsSteine());
+		setAusgabe(new Ausgabe(getKoords()));
 	}
-	public void startGame(){
+
+	@Override
+	public void runGame() {
+		// TODO Auto-generated method stub
 		
 	}
 	
