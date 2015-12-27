@@ -42,7 +42,6 @@ public class Ausgabe {
 		dreheBrett();
 	}
 	
-	
 	/**
 	 * Wird NUR intern aufgerufen!! Wir benutzen in der Logik "zeigeGedrehtesBrett()" und "zeigeBrett()"
 	 */
@@ -79,8 +78,6 @@ public class Ausgabe {
 					this.feld[i][14-j]=save;
 					this.feld[i][j]=save2;
 				}
-
-
 			}
 		}
 	}
@@ -124,7 +121,6 @@ public class Ausgabe {
 						default:
 							feld[i][j+1] =this.istStein(i, j);
 							break;
-
 						}
 					} else {
 						switch (j) {

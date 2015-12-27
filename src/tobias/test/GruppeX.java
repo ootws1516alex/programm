@@ -46,7 +46,7 @@ public interface GruppeX {
      * @return true, falls der Zug des Gegners gültig ist
      * @return false, falls der Zug des Gegbers ungültig ist.
      */
-    public boolean takeYourMover(String hisMove);
+    public boolean takeYourMove(String hisMove);
  
     /**
      * Übergibt dem jeweiligen Programm den gegnerischen Zug.

@@ -11,8 +11,7 @@ public class Spielfeld {
 	
 	public Spielfeld(){
 		this.setKoords(this.initFeld());
-		this.startAufstellung();
-		
+		this.startAufstellung();	
 	}
 
 	public char istStein(int x, int y){
@@ -30,9 +29,7 @@ public class Spielfeld {
 			} else {
 				return koords[x][y].getSpielstein().getColor();
 			} 
-		}
-
-		else {
+		}else {
 			return ' ';
 		}
 	}

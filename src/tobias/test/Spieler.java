@@ -2,10 +2,10 @@ package tobias.test;
 
 public class Spieler {
 	
-	String name;
-	char farbe;
+	private String name;
+	private char farbe;
 	
-	public Spieler(String name,char farbe,boolean spielerNr){
+	public Spieler(String name,char farbe){
 		this.name=name;
 		this.farbe=farbe;
 	}

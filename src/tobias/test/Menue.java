@@ -57,6 +57,7 @@ public class Menue {
 		
 		System.out.println("1: Mensch vs Ai");
 		System.out.println("2: Mensch vs Mensch");
+		System.out.println("3: Wettkampfmodus(Ai vs Ai)");
 		System.out.print("Bitte Spielmodus auswählen: ");
 		
 		do{
@@ -69,34 +70,39 @@ public class Menue {
 			}finally{
 				System.out.println();
 			}
-			if(mode!=1&&mode!=2){
+			if(mode!=1&&mode!=2&&mode!=3){
 				isLegal=false;
 				System.out.println("Bitte gültigen Wert eingeben!");
 			}
 		}while(isLegal==false);
 			
-		
-		System.out.print("Zugzeit in Sekunden eingeben(min.10): ");
-		do{
-			isLegal=true;
-			try{
-				scanner = new Scanner(System.in);
-				time = scanner.nextInt();
-			}catch(Exception e){
-				isLegal=false;
-			}finally{
-				System.out.println();
-			}
+		if(mode!=3){
+			System.out.print("Zugzeit in Sekunden eingeben(min.10): ");
+			do{
+				isLegal=true;
+				try{
+					scanner = new Scanner(System.in);
+					time = scanner.nextInt();
+				}catch(Exception e){
+					isLegal=false;
+				}finally{
+					System.out.println();
+				}
+				
+				if(time<10){
+					isLegal=false;
+					System.out.println("Bitte gültigen Wert eingeben!");
+				}
+			}while(isLegal==false);
+		}
 			
-			if(time<10){
-				isLegal=false;
-				System.out.println("Bitte gültigen Wert eingeben!");
-			}
-		}while(isLegal==false);
-		
-		if(mode==1){
+		if(mode==1||mode==3){
 			do{			
-				System.out.print("Wählen sie ihre Farbe (1=weiß, 2=schwarz, schwarz beginnt immer): ");
+				if(mode==1){
+					System.out.print("Wählen sie ihre Farbe (1=weiß, 2=schwarz, schwarz beginnt immer): ");
+				}else{
+					System.out.print("Wählen sie die Farbe für ihre Ai (1=weiß, 2=schwarz, schwarz beginnt immer): ");
+				}
 				isLegal=true;
 				try{
 					scanner = new Scanner(System.in);
@@ -111,27 +117,14 @@ public class Menue {
 					isLegal=false;
 					}
 			}while(isLegal==false);
-			HumanVSAi game = new HumanVSAi(time,color);
+			if(mode==1){
+				HumanVSAi game = new HumanVSAi(time,color);
+			}else{
+				WettkampfAi game = new WettkampfAi(color);
+			}
 		}else{
-			//do{			
-			//	System.out.print("Wählen sie ihre Farbe (1=weiß, 2=schwarz, schwarz beginnt immer): ");
-				//isLegal=true;
-			//	try{
-			//		scanner = new Scanner(System.in);
-			//		color = scanner.nextInt();
-			//	}catch(Exception e){
-			//		isLegal=false;
-			//	}finally{
-			//		System.out.println();
-			//	}
-				
-			//	if(color!=1&&color!=2){
-			//		isLegal=false;
-			//		}
-			//}while(isLegal==false);
 			HumanVSHuman game = new HumanVSHuman(time,color);
-		}
-		
+		}	
 	}
 	
 	public static void anleitung(){

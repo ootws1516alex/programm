@@ -67,25 +67,25 @@ public abstract class Spiellogik {
 	 * @param aufgabe2
 	 * @return
 	 */
-	public String whoWon(boolean aufgabe1,boolean aufgabe2){
+	public int whoWon(boolean aufgabe1,boolean aufgabe2){
 		if(wSteine.size()==0){
-			return (spieler1.getName()+" hat das Spiel gewonnen");
+			return 1;
 		}
 		if(sSteine.size()==0){
-			return (spieler2.getName()+" hat das Spiel gewonnen");
+			return 2;
 		}
 		if(sSteine.size()==1&&wSteine.size()==1){
 			if(sSteine.get(0).isLady()==true&&wSteine.get(0).isLady()==true){
-				return ("Das Spiel geht unentschieden aus");
+				return 3;
 			}
 		}
 		if(aufgabe1==true){
-			return (spieler2.getName()+" hat das Spiel gewonnen");
+			return 4;
 		}
 		if(aufgabe2==true){
-			return (spieler1.getName()+" hat das Spiel gewonnen");
+			return 5;
 		}else{
-			return ("Das Spiel läuft noch!");
+			return 0;
 		}
 	}
 	/**
@@ -112,9 +112,6 @@ public abstract class Spiellogik {
 		}
 		return false;
 	}
-	
-	public abstract void runGame();
-	public abstract void initGame();
 	
 	/**
 	 * entfernt falls nötig einen zufälligen stein
@@ -562,4 +559,14 @@ public abstract class Spiellogik {
 		return false;
 	}
 	
+	
+	public boolean canMove(int runde){
+		
+		return false;
+	}
+	
+	public String calculateAiMove(int runde){
+	
+		return null;
+	}
 }

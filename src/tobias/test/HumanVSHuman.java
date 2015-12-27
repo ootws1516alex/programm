@@ -5,8 +5,6 @@ import java.util.Scanner;
 
 public class HumanVSHuman extends Spiellogik{
 
-
-
 	public HumanVSHuman(int time, int color) {
 		setTime(time);
 		initGame();
@@ -32,9 +30,9 @@ public class HumanVSHuman extends Spiellogik{
 		System.out.println("Das Spielfeld wurde erzeugt");
 		System.out.print("Spieler1 (weiﬂ) geben sie ihren Namen ein: ");
 		Scanner in = new Scanner(System.in);
-		setSpieler1(new Spieler(in.nextLine(), 's', false));
+		setSpieler1(new Spieler(in.nextLine(), 's'));
 		System.out.print("Spieler2 (schwarz) geben sie ihren Namen ein: ");
-		setSpieler2(new Spieler(in.nextLine(), 'w', true));
+		setSpieler2(new Spieler(in.nextLine(), 'w'));
 		int runde = 0;
 		boolean setExit = false;
 		boolean aufgabe1 = false;
@@ -127,7 +125,19 @@ public class HumanVSHuman extends Spiellogik{
 			setExit=isFinished(aufgabe1,aufgabe2);			
 			runde++;
 		} while (setExit == false);
-		System.out.println(whoWon(aufgabe1,aufgabe2));
+		
+		switch(this.whoWon(aufgabe1,aufgabe2)){
+		case 1: System.out.println(getSpieler1().getName()+" gewinnt!");
+			break;
+		case 2: System.out.println(getSpieler2().getName()+" gewinnt!");
+			break;
+		case 3: System.out.println("Das Spiel endet unentschieden!");
+			break;
+		case 4: System.out.println(getSpieler1().getName()+" gewinnt durch Aufgabe von Spieler 2");
+			break;
+		case 5: System.out.println(getSpieler2().getName()+" gewinnt durch Aufgabe von Spieler 1");
+			break;
+		}
 	}
 	
 	
