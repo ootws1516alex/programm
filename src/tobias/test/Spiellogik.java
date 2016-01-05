@@ -302,7 +302,7 @@ public abstract class Spiellogik {
 
 		int yAktuell = 0;
 		int xAktuell = 0;
-		
+
 		if(runde%2==0){
 			for(int i=0;i<sSteine.size();i++){
 				if(sSteine.get(i).isLady()==true){
@@ -367,6 +367,7 @@ public abstract class Spiellogik {
 				}else{
 					yAktuell=sSteine.get(i).getKoordinate().getY();
 					xAktuell=sSteine.get(i).getKoordinate().getX();
+					
 					if(yAktuell>1&&xAktuell>1){
 						if(koords[yAktuell-1][xAktuell-1].getSpielstein()!=null){
 							if(koords[yAktuell-1][xAktuell-1].getSpielstein().getColor()=='w'){
@@ -384,7 +385,27 @@ public abstract class Spiellogik {
 								}
 							}
 						}
+					}
+					
+					if(yAktuell<4&&xAktuell<4){
+						if(koords[yAktuell+1][xAktuell+1].getSpielstein()!=null){
+							if(koords[yAktuell+1][xAktuell+1].getSpielstein().getColor()=='w'){
+								if(koords[yAktuell+2][xAktuell+2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
+					}	
+					if(yAktuell<4&&xAktuell>1){
+						if(koords[yAktuell+1][xAktuell-1].getSpielstein()!=null){
+							if(koords[yAktuell+1][xAktuell-1].getSpielstein().getColor()=='w'){
+								if(koords[yAktuell+2][xAktuell-2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
 					}		
+					
 				}	
 			}
 		}
@@ -452,6 +473,7 @@ public abstract class Spiellogik {
 				}else{
 					yAktuell=wSteine.get(i).getKoordinate().getY();
 					xAktuell=wSteine.get(i).getKoordinate().getX();
+					
 					if(yAktuell<4&&xAktuell>1){
 						if(koords[yAktuell+1][xAktuell-1].getSpielstein()!=null){
 							if(koords[yAktuell+1][xAktuell-1].getSpielstein().getColor()=='s'){
@@ -469,7 +491,27 @@ public abstract class Spiellogik {
 								}
 							}
 						}
-					}		
+					}
+					
+					if(yAktuell>1&&xAktuell>1){
+						if(koords[yAktuell-1][xAktuell-1].getSpielstein()!=null){
+							if(koords[yAktuell-1][xAktuell-1].getSpielstein().getColor()=='s'){
+								if(koords[yAktuell-2][xAktuell-2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
+					}	
+					if(yAktuell>1&&xAktuell<4){
+						if(koords[yAktuell-1][xAktuell+1].getSpielstein()!=null){
+							if(koords[yAktuell-1][xAktuell+1].getSpielstein().getColor()=='s'){
+								if(koords[yAktuell-2][xAktuell+2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
+					}
+					
 				}	
 			}
 		}
