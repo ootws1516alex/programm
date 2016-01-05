@@ -578,17 +578,32 @@ public abstract class Spiellogik {
 			if (xAktuell == xSoll + 1-z&& (yAktuell == ySoll + 1 || yAktuell == ySoll - 1)) {
 				return true;
 			}
-			if (xAktuell == xSoll + 2-z*2&& (yAktuell == ySoll + 2 || yAktuell == ySoll - 2)) {
-				if((ySoll>yAktuell)&&(koords[xAktuell-1+z][yAktuell+1].getSpielstein()!=null)){
-					if(koords[xAktuell-1+z][yAktuell+1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor()){
+			if (xAktuell == xSoll + 2||xAktuell == xSoll - 2&& (yAktuell == ySoll + 2 || yAktuell == ySoll - 2)) {	
+				
+				
+				if((koords[xAktuell+1][yAktuell+1].getSpielstein()!=null)){
+					if(koords[xAktuell+1][yAktuell+1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor()){
 						return true;
 					}
 				}
-				if((ySoll<yAktuell)&&(koords[xAktuell-1+z][yAktuell-1].getSpielstein()!=null)){
-					if((koords[xAktuell-1+z][yAktuell-1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor())){
+				if((koords[xAktuell+1][yAktuell-1].getSpielstein()!=null)){
+					if((koords[xAktuell+1][yAktuell-1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor())){
 						return true;
 					}
 				}
+				
+				if((koords[xAktuell-1][yAktuell+1].getSpielstein()!=null)){
+					if(koords[xAktuell-1][yAktuell+1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor()){
+						return true;
+					}
+				}
+				if((koords[xAktuell-1][yAktuell-1].getSpielstein()!=null)){
+					if((koords[xAktuell-1][yAktuell-1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor())){
+						return true;
+					}
+				}
+				
+				
 			}
 			if(koords[xAktuell][yAktuell].getSpielstein().isLady()==true){
 				int i1 = xSoll - xAktuell;
