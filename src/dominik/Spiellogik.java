@@ -2,6 +2,8 @@ package dominik;
 
 import java.util.ArrayList;
 
+import com.sun.org.apache.bcel.internal.generic.LSTORE;
+
 public abstract class Spiellogik {
 
 	private Koordinate koords[][];
@@ -9,7 +11,7 @@ public abstract class Spiellogik {
 	private Ausgabe ausgabe;
 	private ArrayList<Spielstein> wSteine;
 	private ArrayList<Spielstein> sSteine;
-	private Bewegungsbewertung moeglicheZuege[][] = new Bewegungsbewertung[6][4];
+	private Bewegungsbewertung moeglicheZuege[][];
 
 	public Koordinate[][] getKoords() {
 		return koords;
@@ -150,7 +152,7 @@ public abstract class Spiellogik {
 			return false;
 		}
 		String moeglicheBuchstaben = "ABCDEF";
-		for (int i = 0; i < aktuellerZug.length() - 1; i++) {
+		for (int i = 0; i < aktuellerZug.length() ; i++) {
 			if (i % 2 == 0) {
 				if (moeglicheBuchstaben.indexOf(aktuellerZug.charAt(i)) == -1) {
 					return false;
@@ -368,6 +370,7 @@ public abstract class Spiellogik {
 				}else{
 					yAktuell=sSteine.get(i).getKoordinate().getY();
 					xAktuell=sSteine.get(i).getKoordinate().getX();
+
 					if(yAktuell>1&&xAktuell>1){
 						if(koords[yAktuell-1][xAktuell-1].getSpielstein()!=null){
 							if(koords[yAktuell-1][xAktuell-1].getSpielstein().getColor()=='w'){
@@ -385,7 +388,27 @@ public abstract class Spiellogik {
 								}
 							}
 						}
+					}
+
+					if(yAktuell<4&&xAktuell<4){
+						if(koords[yAktuell+1][xAktuell+1].getSpielstein()!=null){
+							if(koords[yAktuell+1][xAktuell+1].getSpielstein().getColor()=='w'){
+								if(koords[yAktuell+2][xAktuell+2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
+					}	
+					if(yAktuell<4&&xAktuell>1){
+						if(koords[yAktuell+1][xAktuell-1].getSpielstein()!=null){
+							if(koords[yAktuell+1][xAktuell-1].getSpielstein().getColor()=='w'){
+								if(koords[yAktuell+2][xAktuell-2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
 					}		
+
 				}	
 			}
 		}
@@ -453,6 +476,7 @@ public abstract class Spiellogik {
 				}else{
 					yAktuell=wSteine.get(i).getKoordinate().getY();
 					xAktuell=wSteine.get(i).getKoordinate().getX();
+
 					if(yAktuell<4&&xAktuell>1){
 						if(koords[yAktuell+1][xAktuell-1].getSpielstein()!=null){
 							if(koords[yAktuell+1][xAktuell-1].getSpielstein().getColor()=='s'){
@@ -470,7 +494,27 @@ public abstract class Spiellogik {
 								}
 							}
 						}
-					}		
+					}
+
+					if(yAktuell>1&&xAktuell>1){
+						if(koords[yAktuell-1][xAktuell-1].getSpielstein()!=null){
+							if(koords[yAktuell-1][xAktuell-1].getSpielstein().getColor()=='s'){
+								if(koords[yAktuell-2][xAktuell-2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
+					}	
+					if(yAktuell>1&&xAktuell<4){
+						if(koords[yAktuell-1][xAktuell+1].getSpielstein()!=null){
+							if(koords[yAktuell-1][xAktuell+1].getSpielstein().getColor()=='s'){
+								if(koords[yAktuell-2][xAktuell+2].getSpielstein()==null){
+									return true;
+								}
+							}
+						}
+					}
+
 				}	
 			}
 		}
@@ -525,44 +569,145 @@ public abstract class Spiellogik {
 		int yAktuell = aktuellerZug.charAt(0) - '@' - 1;
 		int xSoll = aktuellerZug.charAt(3) - '0' - 1;
 		int ySoll = aktuellerZug.charAt(2) - '@' - 1;
+		int xBewegung;
+		int yBewegung;
 		int z;
 
 
-		if(runde%2 == 1){
-			z = 0;
+		if(runde%2==1){
+			z=0;
 		}else{
-			z = 2;
+			z=2;
 		}
-		if(koords[xAktuell][yAktuell].getSpielstein() != null && koords[xSoll][ySoll].getSpielstein() == null){
+
+		if(koords[xSoll][ySoll].getSpielstein() != null) {
+			return false;
+		}
+
+		if(koords[xAktuell][yAktuell].getSpielstein() != null && koords[xSoll][ySoll].getSpielstein()==null){
 			if (xAktuell == xSoll + 1-z && (yAktuell == ySoll + 1 || yAktuell == ySoll - 1)) {
 				return true;
 			}
-			if (xAktuell == xSoll + 2-z*2 && (yAktuell == ySoll + 2 || yAktuell == ySoll - 2)) {
-				if((ySoll>yAktuell)&&(koords[xAktuell-1+z][yAktuell+1].getSpielstein()!= null)){
-					if(koords[xAktuell-1+z][yAktuell+1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor()){
-						return true;
+		}
+
+		if((xAktuell == xSoll + 2||xAktuell == xSoll - 2) && (yAktuell == ySoll + 2 || yAktuell == ySoll - 2)) {
+
+			if(xAktuell + 1 < 6 && yAktuell + 1 < 6)
+				if((koords[xAktuell+1][yAktuell+1].getSpielstein()!=null)){
+					if(koords[xAktuell+1][yAktuell+1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor()){
+						if(xAktuell+2 == xSoll && yAktuell+2 == ySoll) {
+							return true;
+						}
 					}
 				}
-				if((ySoll<yAktuell) && (koords[xAktuell-1+z][yAktuell-1].getSpielstein()!= null)){
-					if((koords[xAktuell-1+z][yAktuell-1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor())){
-						return true;
+			if(xAktuell + 1 < 6 && yAktuell - 1 >= 0)
+				if((koords[xAktuell+1][yAktuell-1].getSpielstein()!=null)){
+					if((koords[xAktuell+1][yAktuell-1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor())){
+						if(xAktuell+2 == xSoll && yAktuell-2 == ySoll) {
+							return true;
+						}
 					}
 				}
-			}
+			if(xAktuell - 1 >= 0 && yAktuell + 1 < 6)
+				if((koords[xAktuell-1][yAktuell+1].getSpielstein()!=null)){
+					if(koords[xAktuell-1][yAktuell+1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor()){
+						if(xAktuell-2 == xSoll && yAktuell+2 == ySoll) {
+							return true;
+						}
+					}
+				}
+			if(xAktuell - 1 >= 0 && yAktuell - 1 >= 0)
+				if((koords[xAktuell-1][yAktuell-1].getSpielstein()!=null)){
+					if((koords[xAktuell-1][yAktuell-1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor())){
+						if(xAktuell-2 == xSoll && yAktuell-2 == ySoll) {
+							return true;
+						}
+					}
+				}
+		}
+
+
+
+		//		if((xAktuell == xSoll + 2||xAktuell == xSoll - 2) && (yAktuell == ySoll + 2 || yAktuell == ySoll - 2)) {	
+		//
+		//			if(xAktuell + 1 < 6 && yAktuell + 1 < 6)
+		//				if((koords[xAktuell+1][yAktuell+1].getSpielstein()!=null)){
+		//					if(koords[xAktuell+1][yAktuell+1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor()){
+		//						return true;
+		//					}
+		//				}
+		//			if(xAktuell + 1 < 6 && yAktuell - 1 >= 0)
+		//				if((koords[xAktuell+1][yAktuell-1].getSpielstein()!=null)){
+		//					if((koords[xAktuell+1][yAktuell-1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor())){
+		//						return true;
+		//					}
+		//				}
+		//			if(xAktuell - 1 >= 0 && yAktuell + 1 < 6)
+		//				if((koords[xAktuell-1][yAktuell+1].getSpielstein()!=null)){
+		//					if(koords[xAktuell-1][yAktuell+1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor()){
+		//						return true;
+		//					}
+		//				}
+		//			if(xAktuell - 1 >= 0 && yAktuell - 1 >= 0)
+		//				if((koords[xAktuell-1][yAktuell-1].getSpielstein()!=null)){
+		//					if((koords[xAktuell-1][yAktuell-1].getSpielstein().getColor()!=koords[xAktuell][yAktuell].getSpielstein().getColor())){
+		//						return true;
+		//					}
+		//				}
+		//		}
+
+		if(koords[xAktuell][yAktuell].getSpielstein() != null) {
 			if(koords[xAktuell][yAktuell].getSpielstein().isLady()==true){
-				int i1 = xSoll - xAktuell;
-				int i2 = ySoll - yAktuell;
-				if (Math.abs(i1) == Math.abs(i2)) {
-					return true;
+
+				xBewegung = xAktuell - xSoll;
+				yBewegung = yAktuell - ySoll;
+				int xBewegungsRichtung, yBewegungsRichtung;
+
+				if(xBewegung < 0)
+					yBewegungsRichtung = -1;
+				else
+					yBewegungsRichtung = 1;
+				if(yBewegung < 0)
+					xBewegungsRichtung = -1;
+				else
+					xBewegungsRichtung = 1;
+
+
+				if(Math.abs(xBewegung) == Math.abs(yBewegung)) {
+					for(int i = 1; i <= Math.abs(xBewegung); i++) {
+						if((xAktuell+(i*xBewegungsRichtung) >= 0 && xAktuell+(i*xBewegungsRichtung) < 6) && (yAktuell+(i*yBewegungsRichtung) < 6 && yAktuell+(i*yBewegungsRichtung) >= 0)) {
+							if(koords[xAktuell+(xBewegungsRichtung*i)][yAktuell+(yBewegungsRichtung*i)].getSpielstein() != null) {
+								if(koords[xAktuell+(xBewegungsRichtung*i)][yAktuell+(yBewegungsRichtung*i)].getSpielstein().getColor() == koords[xAktuell][yAktuell].getSpielstein().getColor()) {
+									return false;
+								} else {
+									if(xAktuell+(xBewegungsRichtung*(i+1)) == xSoll && yAktuell+(yBewegungsRichtung*(i+1)) == ySoll) {
+										if(koords[xSoll][ySoll].getSpielstein() == null) {
+											return true;
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
+
+
+		//					if(koords[xAktuell][yAktuell].getSpielstein().isLady()==true){
+		//						int i1 = xSoll - xAktuell;
+		//						int i2 = ySoll - yAktuell;
+		//						if (Math.abs(i1) == Math.abs(i2)) {
+		//							return true;
+		//						}
+		//					}
+
 		return false;
 	}
 
 
 	public boolean canMove(int runde){
-
+		//TODO pruefen ob Spieler noch ziehen/schlagen kann
 		return false;
 	}
 
@@ -571,23 +716,15 @@ public abstract class Spiellogik {
 
 		if(runde%2 == 0) {
 			if(mussSchlagen(runde)) {
-				for(int i = 0; i < sSteine.size(); i++) {
-					zug = schlagenlogik(runde);
-				}
+				zug = schlagenAi(runde);
 			} else {
-				for(int i = 0; i < sSteine.size(); i++) {
-					zug = bewegenAi(runde);
-				}
+				zug = bewegenAi(runde);
 			}
 		} else {
 			if(mussSchlagen(runde)) {
-				for(int i = 0; i < wSteine.size(); i++) {
-					zug = schlagenlogik(runde);
-				}
+				zug = schlagenAi(runde);
 			} else {
-				for(int i = 0; i < wSteine.size(); i++) {
-					zug = bewegenAi(runde);
-				}
+				zug = bewegenAi(runde);
 			}
 		}
 		return zug;
@@ -595,57 +732,51 @@ public abstract class Spiellogik {
 
 	private String bewegenAi(int runde) {
 
+		int listGroesse;
+
 		if(runde%2 == 0) {
 			bewegenLogik(runde, sSteine);
+			listGroesse = sSteine.size();
 		} else {
 			bewegenLogik(runde, wSteine);
+			listGroesse = wSteine.size();
 		}
 
 		Bewegungsbewertung best = new Bewegungsbewertung(null, -50);
+		ArrayList<Bewegungsbewertung> bestList = new ArrayList();
 
-		for(int i = 0; i < 6; i++) {
-			for(int j = 0; j < 6; j++) {
-				if(moeglicheZuege[i][j].getBewertung() >= best.getBewertung()) {
-					best = moeglicheZuege[i][j];
+		bestList.add(best);
+
+		for(int i = 0; i < listGroesse; i++) {
+			for(int j = 0; j < 9; j++) {
+				if(moeglicheZuege[i][j] != null) {
+					if(richtigerZug(moeglicheZuege[i][j].getZug(), runde)) {
+						if(moeglicheZuege[i][j].getBewertung() > bestList.get(0).getBewertung()) {
+							bestList.clear();
+							bestList.add(moeglicheZuege[i][j]);
+						} else if (moeglicheZuege[i][j].getBewertung() == bestList.get(0).getBewertung()){
+							bestList.add(moeglicheZuege[i][j]);
+						}
+					}
 				}
 			}
 		}
+
+		best = bestList.get((int)(Math.random()*(bestList.size())));
+
 		return best.getZug();
 	}
 
 	private void bewegenLogik(int runde, ArrayList<Spielstein> steine) {
 
-		Spielstein stein, temp;
-		int bewertung;
+		Spielstein stein;
+		int bewertung, counter;
 		String bewegung;
-
-		//		if(runde%2 == 1) {
-		//			for(int i = 0; i < 6; i++) {
-		//				for(int j = 0; j < 3; j++) {
-		//
-		//					temp = koords[i][j].getSpielstein();
-		//					koords[i][j].setSpielstein(koords[5 - i][5-j].getSpielstein());
-		//					koords[5 - i][5-j].setSpielstein(temp);;
-		//
-		//
-		//					if(koords[i][j].getSpielstein() != null)
-		//						koords[i][j].getSpielstein().setKoordinate(new Koordinate(5-j, 5-i, "" + ((char)((5-i)+'A')) + ((char)((5-j)+'1'))));
-		//					if(koords[5 - i][5-j].getSpielstein() != null)
-		//						koords[5 - i][5-j].getSpielstein().setKoordinate(new Koordinate(j, i, "" + ((char)(i + 'A')) + ((char)(j + '1'))));
-		//
-		//
-		//					if(koords[i][j].getSpielstein() != null)
-		//						koords[i][j].getSpielstein().setKoordinate(new Koordinate(5 - j, 5 - i, "" + ((char) (i + 4 + 'A')) + ((char)(j + 5 + '0'))));
-		//					if(koords[5 - i][5-j].getSpielstein() != null)
-		//						koords[5 - i][5-j].getSpielstein().setKoordinate(new Koordinate(j, i, "" + ((char) (i +'A')) + ((char)(j + '0'))));
-		//				}
-		//			}
-		//		}
+		moeglicheZuege = new Bewegungsbewertung[steine.size()][9];
 
 
-		//TODO OutOfBounds durch Abfrage ob >6 <0 entgehen
-		//TODO Herausfinden warum die Steine um 90° gedreht sind
 		for(int i = 0; i < steine.size(); i++) {
+			counter = 0;
 			stein = steine.get(i);
 			if(!stein.isLady()) {
 				if(runde%2==0) {
@@ -655,9 +786,10 @@ public abstract class Spiellogik {
 				}
 				if(pruefeAufGueltigeKoord(bewegung)) {
 					if(richtigerZug(bewegung, runde)) {
-						bewertung = bewerten(bewegung, stein, runde);
+						bewertung = bewertenBewegen(bewegung, stein, runde);
 						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
-						moeglicheZuege[i][0] = bewegungsbewertung;
+						moeglicheZuege[i][counter] = bewegungsbewertung;
+						counter++;	
 					}
 				}
 
@@ -668,68 +800,416 @@ public abstract class Spiellogik {
 				}
 				if(pruefeAufGueltigeKoord(bewegung)) {
 					if(richtigerZug(bewegung, runde)) {
-						bewertung = bewerten(bewegung, stein, runde);
+						bewertung = bewertenBewegen(bewegung, stein, runde);
 						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
-						moeglicheZuege[i][1] = bewegungsbewertung;
+						moeglicheZuege[i][counter] = bewegungsbewertung;
+						counter++;
 					}
 				}
 
 			} else {
-				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) + 1)) + ((char)(stein.getKoordinate().getName().charAt(1) + 1));
-				if(pruefeAufGueltigeKoord(bewegung)) {
-					if(richtigerZug(bewegung, runde)) {
-						bewertung = bewerten(bewegung, stein, runde);
-						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
-						moeglicheZuege[i][0] = bewegungsbewertung;
+
+				for(int j = 1; j <= 5; j++) {
+					bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) + j)) + ((char)(stein.getKoordinate().getName().charAt(1) + j));
+					if(pruefeAufGueltigeKoord(bewegung)) {
+						if(richtigerZug(bewegung, runde)) {
+							bewertung = bewertenBewegen(bewegung, stein, runde, j);
+							Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+							moeglicheZuege[i][counter] = bewegungsbewertung;
+							counter++;
+						}
+					}
+					bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) + j)) + ((char)(stein.getKoordinate().getName().charAt(1) - j));
+					if(pruefeAufGueltigeKoord(bewegung)) {
+						if(richtigerZug(bewegung, runde)) {
+							bewertung = bewertenBewegen(bewegung, stein, runde, j);
+							Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+							moeglicheZuege[i][counter] = bewegungsbewertung;
+							counter++;
+						}
+					}
+					bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) - j)) + ((char)(stein.getKoordinate().getName().charAt(1) + j));
+					if(pruefeAufGueltigeKoord(bewegung)) {
+						if(richtigerZug(bewegung, runde)) {
+							bewertung = bewertenBewegen(bewegung, stein, runde, j);
+							Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+							moeglicheZuege[i][counter] = bewegungsbewertung;
+							counter++;
+						}
+					}
+					bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) - j)) + ((char)(stein.getKoordinate().getName().charAt(1) - j));
+					if(pruefeAufGueltigeKoord(bewegung)) {
+						if(richtigerZug(bewegung, runde)) {
+							bewertung = bewertenBewegen(bewegung, stein, runde, j);
+							Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+							moeglicheZuege[i][counter] = bewegungsbewertung;
+							counter++;
+						}
 					}
 				}
-				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) + 1)) + ((char)(stein.getKoordinate().getName().charAt(1) - 1));
-				if(pruefeAufGueltigeKoord(bewegung)) {
-					if(richtigerZug(bewegung, runde)) {
-						bewertung = bewerten(bewegung, stein, runde);
-						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
-						moeglicheZuege[i][1] = bewegungsbewertung;
-					}
-				}
-				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) - 1)) + ((char)(stein.getKoordinate().getName().charAt(1) + 1));
-				if(pruefeAufGueltigeKoord(bewegung)) {
-					if(richtigerZug(bewegung, runde)) {
-						bewertung = bewerten(bewegung, stein, runde);
-						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
-						moeglicheZuege[i][2] = bewegungsbewertung;
-					}
-				}
-				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) - 1)) + ((char)(stein.getKoordinate().getName().charAt(1) - 1));
-				if(pruefeAufGueltigeKoord(bewegung)) {
-					if(richtigerZug(bewegung, runde)) {
-						bewertung = bewerten(bewegung, stein, runde);
-						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
-						moeglicheZuege[i][3] = bewegungsbewertung;
+
+				//				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) + 1)) + ((char)(stein.getKoordinate().getName().charAt(1) + 1));
+				//				if(pruefeAufGueltigeKoord(bewegung)) {
+				//					if(richtigerZug(bewegung, runde)) {
+				//						bewertung = bewertenBewegen(bewegung, stein, runde);
+				//						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+				//						moeglicheZuege[i][0] = bewegungsbewertung;
+				//					}
+				//				}
+				//				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) + 1)) + ((char)(stein.getKoordinate().getName().charAt(1) - 1));
+				//				if(pruefeAufGueltigeKoord(bewegung)) {
+				//					if(richtigerZug(bewegung, runde)) {
+				//						bewertung = bewertenBewegen(bewegung, stein, runde);
+				//						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+				//						moeglicheZuege[i][1] = bewegungsbewertung;
+				//					}
+				//				}
+				//				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) - 1)) + ((char)(stein.getKoordinate().getName().charAt(1) + 1));
+				//				if(pruefeAufGueltigeKoord(bewegung)) {
+				//					if(richtigerZug(bewegung, runde)) {
+				//						bewertung = bewertenBewegen(bewegung, stein, runde);
+				//						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+				//						moeglicheZuege[i][2] = bewegungsbewertung;
+				//					}
+				//				}
+				//				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) - 1)) + ((char)(stein.getKoordinate().getName().charAt(1) - 1));
+				//				if(pruefeAufGueltigeKoord(bewegung)) {
+				//					if(richtigerZug(bewegung, runde)) {
+				//						bewertung = bewertenBewegen(bewegung, stein, runde);
+				//						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+				//						moeglicheZuege[i][3] = bewegungsbewertung;
+				//					}
+				//				}
+			}
+		}
+	}
+
+	private String schlagenAi(int runde) {
+
+		int listGroesse;
+
+		if(runde%2 == 0) {
+			schlagenLogik(runde, sSteine);
+			listGroesse = sSteine.size();
+		} else {
+			schlagenLogik(runde, wSteine);
+			listGroesse = wSteine.size();
+		}
+
+		Bewegungsbewertung best = new Bewegungsbewertung(null, -50);
+		ArrayList<Bewegungsbewertung> bestList = new ArrayList();
+
+		bestList.add(best);
+
+		for(int i = 0; i < listGroesse; i++) {
+			for(int j = 0; j < 9; j++) {
+				if(moeglicheZuege[i][j] != null) {
+					if(richtigerZug(moeglicheZuege[i][j].getZug(), runde)) {
+						if(moeglicheZuege[i][j].getBewertung() > bestList.get(0).getBewertung()) {
+							bestList.clear();
+							bestList.add(moeglicheZuege[i][j]);
+						} else if (moeglicheZuege[i][j].getBewertung() == bestList.get(0).getBewertung()){
+							bestList.add(moeglicheZuege[i][j]);
+						}
 					}
 				}
 			}
 		}
 
-		//		if(runde%2 == 1) {
-		//			for(int i = 0; i < 3; i++) {
-		//				for(int j = 0; j < 6; j++) {
-		//
-		//					temp = koords[i][j].getSpielstein();
-		//					koords[i][j].setSpielstein(koords[5 - i][5-j].getSpielstein());
-		//					koords[5 - i][5-j].setSpielstein(temp);;
-		//					koords[i][j].getSpielstein().setKoordinate(new Koordinate(j, i, "" + ((char) i + 'A') + j));
-		//					koords[5 - i][5-j].getSpielstein().setKoordinate(new Koordinate(5 - j, 5 - i, "" + ((char) (i - 5) + 'A') + (j-5)));
-		//				}
-		//			}
-		//		}
+		best = bestList.get((int)(Math.random()*(bestList.size())));
+
+		return best.getZug();
 	}
 
-	private String schlagenlogik(int runde) {
+	private void schlagenLogik(int runde, ArrayList<Spielstein> steine) {
+		Spielstein stein;
+		int bewertung, counter;
+		String bewegung;
+		moeglicheZuege = new Bewegungsbewertung[steine.size()][9];
 
-		return null;
+
+		for(int i = 0; i < steine.size(); i++) {
+			counter = 0;
+			stein = steine.get(i);
+			if(!stein.isLady()) {	
+				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) + 2)) + ((char)(stein.getKoordinate().getName().charAt(1) + 2));
+				if(pruefeAufGueltigeKoord(bewegung)) {
+					if(richtigerZug(bewegung, runde)) {
+						bewertung = bewertenSchlagen(bewegung, stein, runde);
+						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+						moeglicheZuege[i][counter] = bewegungsbewertung;
+						counter++;
+					}
+				}
+
+				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) + 2)) + ((char)(stein.getKoordinate().getName().charAt(1) - 2));
+				if(pruefeAufGueltigeKoord(bewegung)) {
+					if(richtigerZug(bewegung, runde)) {
+						bewertung = bewertenSchlagen(bewegung, stein, runde);
+						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+						moeglicheZuege[i][counter] = bewegungsbewertung;
+						counter++;
+					}
+				}
+
+				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) - 2)) + ((char)(stein.getKoordinate().getName().charAt(1) + 2));
+				if(pruefeAufGueltigeKoord(bewegung)) {
+					if(richtigerZug(bewegung, runde)) {
+						bewertung = bewertenSchlagen(bewegung, stein, runde);
+						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+						moeglicheZuege[i][counter] = bewegungsbewertung;
+						counter++;
+					}
+				}
+
+				bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) - 2)) + ((char)(stein.getKoordinate().getName().charAt(1) - 2));
+				if(pruefeAufGueltigeKoord(bewegung)) {
+					if(richtigerZug(bewegung, runde)) {
+						bewertung = bewertenSchlagen(bewegung, stein, runde);
+						Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+						moeglicheZuege[i][counter] = bewegungsbewertung;
+						counter++;
+					}
+				}
+
+
+			} else {
+
+				for(int j = 1; j <= 5; j++) {
+					bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) + 2 + j)) + ((char)(stein.getKoordinate().getName().charAt(1) + 2 + j));
+					if(pruefeAufGueltigeKoord(bewegung)) {
+						if(richtigerZug(bewegung, runde)) {
+							bewertung = bewertenSchlagen(bewegung, stein, runde, j);
+							Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+							moeglicheZuege[i][counter] = bewegungsbewertung;
+							counter++;
+						}
+					}
+
+					bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) + 2 + j)) + ((char)(stein.getKoordinate().getName().charAt(1) - 2 - j));
+					if(pruefeAufGueltigeKoord(bewegung)) {
+						if(richtigerZug(bewegung, runde)) {
+							bewertung = bewertenSchlagen(bewegung, stein, runde, j);
+							Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+							moeglicheZuege[i][counter] = bewegungsbewertung;
+							counter++;
+						}
+					}
+
+					bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) - 2 - j)) + ((char)(stein.getKoordinate().getName().charAt(1) + 2 + j));
+					if(pruefeAufGueltigeKoord(bewegung)) {
+						if(richtigerZug(bewegung, runde)) {
+							bewertung = bewertenSchlagen(bewegung, stein, runde, j);
+							Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+							moeglicheZuege[i][counter] = bewegungsbewertung;
+							counter++;
+						}
+					}
+
+					bewegung = stein.getKoordinate().getName() + ((char)(stein.getKoordinate().getName().charAt(0) - 2 - j)) + ((char)(stein.getKoordinate().getName().charAt(1) - 2 - j));
+					if(pruefeAufGueltigeKoord(bewegung)) {
+						if(richtigerZug(bewegung, runde)) {
+							bewertung = bewertenSchlagen(bewegung, stein, runde, j);
+							Bewegungsbewertung bewegungsbewertung = new Bewegungsbewertung(bewegung, bewertung);
+							moeglicheZuege[i][counter] = bewegungsbewertung;
+							counter++;
+						}
+					}
+				}
+			}
+		}
 	}
 
-	private int bewerten(String bewegung, Spielstein stein, int runde) {
+
+
+
+
+//TODO dame muss rückwärs laufen
+
+
+
+
+
+
+
+
+
+	private int bewertenSchlagen(String bewegung, Spielstein stein, int runde) {
+
+		int xAktuell, xSoll, yAktuell, ySoll, xBewegung, yBewegung, bewertung = 0;
+
+		xAktuell = bewegung.charAt(0) - '@' - 1;
+		yAktuell = bewegung.charAt(1) - '0' - 1;
+		xSoll = bewegung.charAt(2) - '@' - 1;
+		ySoll = bewegung.charAt(3) - '0' - 1;
+		xBewegung = (xAktuell - xSoll)/2;
+		yBewegung = (yAktuell - ySoll)/2;
+
+
+		pruefeAufGueltigeKoord(bewegung);
+
+
+		if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5) {
+			if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0) {
+					if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 'w') {
+						bewertung -= 1;
+					}
+				} else {
+					if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 's') {
+						bewertung -= 1;		
+
+					}
+				} 
+			}
+		}
+
+		if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5) {
+			if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0){
+					if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 'w') {
+						if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5)
+							if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() == null) {
+								bewertung -= 1;		
+							}
+					}
+				} else {
+					if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 's') {
+						if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5)
+							if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() == null) {
+								bewertung -= 1;
+							}
+					}
+				}
+			} 
+		}
+
+		if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5) {
+			if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0) {
+					if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein().getColor() == 'w') {
+						if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5)
+							if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() == null) {
+								bewertung -= 1;			
+							}
+					}
+				} else {
+					if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein().getColor() == 's') {
+						if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5)
+							if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() == null) {
+								bewertung -= 1;
+							}
+					}
+				}
+			}
+		}
+
+		if(bewertung < -1) {
+			bewertung = -1;
+		}
+
+		return bewertung;
+	}
+
+	private int bewertenSchlagen(String bewegung, Spielstein stein, int runde, int j) {
+
+		int xAktuell, xSoll, yAktuell, ySoll, xBewegung, yBewegung, bewertung = 0;
+
+		xAktuell = bewegung.charAt(0) - '@' - 1;
+		yAktuell = bewegung.charAt(1) - '0' - 1;
+		xSoll = bewegung.charAt(2) - '@' - 1;
+		ySoll = bewegung.charAt(3) - '0' - 1;
+		xBewegung = xAktuell - xSoll;
+		yBewegung = yAktuell - ySoll;
+
+		if(xBewegung > 1 || xBewegung < -1)
+			xBewegung /= j;
+		if(yBewegung > 1 || yBewegung < -1)
+			yBewegung /= j;
+
+
+		pruefeAufGueltigeKoord(bewegung);
+
+
+		if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5) {
+			if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0) {
+					if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 'w') {
+						bewertung -= 2;
+					}
+				} else {
+					if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 's') {
+						bewertung -= 2;		
+
+					}
+				} 
+			}
+		}
+
+		if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5) {
+			if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0){
+					if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 'w') {
+						if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5)
+							if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() == null) {
+								bewertung -= 2;		
+							}
+					}
+				} else {
+					if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 's') {
+						if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5)
+							if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() == null) {
+								bewertung -= 2;
+							}
+					}
+				}
+			} 
+		}
+
+		if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5) {
+			if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0) {
+					if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein().getColor() == 'w') {
+						if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5)
+							if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() == null) {
+								bewertung -= 2;			
+							}
+					}
+				} else {
+					if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein().getColor() == 's') {
+						if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5)
+							if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() == null) {
+								bewertung -= 2;
+							}
+					}
+				}
+			}
+		}
+
+		if(bewertung < -2) {
+			bewertung = -2;
+		}
+
+		return bewertung;
+	}
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * 
+	 * @param bewegung Zug der Ausgeführt wird
+	 * @param stein der bewegt wird
+	 * @param runde
+	 * @return asd bewertung für den zug
+	 */
+	private int bewertenBewegen(String bewegung, Spielstein stein, int runde) {
 
 		int xAktuell, xSoll, yAktuell, ySoll, xBewegung, yBewegung, bewertung = 0;
 
@@ -741,81 +1221,156 @@ public abstract class Spiellogik {
 		yBewegung = yAktuell - ySoll;
 
 
+		pruefeAufGueltigeKoord(bewegung);
 
-		if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein() != null) {
-			if(runde%2 == 0) {
-				if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 'w') {
-					if(stein.isLady()) {
-						bewertung -= 20;
-					} else {
+
+		if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5) {
+			if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0) {
+					if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 'w') {
 						bewertung -= 10;
 					}
+				} else {
+					if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 's') {
+						bewertung -= 10;			
+					}
 				}
-			} else {
-				if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 's') {
-					if(stein.isLady()) {
-						bewertung -= 20;
-					} else {
-						bewertung -= 10;
-					}				}
-			}
-		} 
-		if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() != null) {
-			if(runde%2 == 0){
-				if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 'w') {
-					if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() == null) {
-						if(stein.isLady()) {
-							bewertung -= 20;
-						} else {
-							bewertung -= 10;
-						}					}
+			} 
+		}
+
+		if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5) {
+			if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0){
+					if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 'w') {
+						if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5)
+							if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() == null) {
+								bewertung -= 10;			
+							}
+					}
+				} else {
+					if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 's') {
+						if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5)
+							if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() == null) {
+								bewertung -= 10;
+							}
+					}
 				}
-			} else {
-				if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 's') {
-					if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() == null) {
-						if(stein.isLady()) {
-							bewertung -= 20;
-						} else {
-							bewertung -= 10;
-						}					}
-				}
-			}
-		} 
-		if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() != null) {
-			if(runde%2 == 0) {
-				if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein().getColor() == 'w') {
-					if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() == null) {
-						if(stein.isLady()) {
-							bewertung -= 20;
-						} else {
-							bewertung -= 10;
-						}					}
-				}
-			} else {
-				if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein().getColor() == 's') {
-					if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() == null) {
-						if(stein.isLady()) {
-							bewertung -= 20;
-						} else {
-							bewertung -= 10;
-						}					}
+			} 
+		}
+
+		if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5) {
+			if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0) {
+					if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein().getColor() == 'w') {
+						if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5)
+							if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() == null) {
+								bewertung -= 10;			
+							}
+					}
+				} else {
+					if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein().getColor() == 's') {
+						if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5)
+							if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() == null) {
+								bewertung -= 10;			
+							}
+					}
 				}
 			}
 		}
 
-		if(stein.isLady()) {
-			if(bewertung < -20) {
-				bewertung = -20;
-			} 
-		} else {
-			if(bewertung < -10) {
-				bewertung = -10;
-			}
+		if(bewertung < -10) {
+			bewertung = -10;
 		}
+
 
 		return bewertung;
 	}
 
+	/**
+	 * 
+	 * @param bewegung Zug der Ausgeführt wird
+	 * @param stein der bewegt wird
+	 * @param runde
+	 * @return asd bewertung für den zug
+	 */
+	private int bewertenBewegen(String bewegung, Spielstein stein, int runde, int j) {
 
+		int xAktuell, xSoll, yAktuell, ySoll, xBewegung, yBewegung, bewertung = 0;
+
+		xAktuell = bewegung.charAt(0) - '@' - 1;
+		yAktuell = bewegung.charAt(1) - '0' - 1;
+		xSoll = bewegung.charAt(2) - '@' - 1;
+		ySoll = bewegung.charAt(3) - '0' - 1;
+		xBewegung = xAktuell - xSoll;
+		yBewegung = yAktuell - ySoll;
+
+		if(xBewegung > 1 || xBewegung < -1)
+			xBewegung /= j;
+
+		if(yBewegung > 1 || yBewegung < -1)
+			yBewegung /= j;
+
+
+		pruefeAufGueltigeKoord(bewegung);
+
+
+		if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5) {
+			if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0) {
+					if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 'w') {
+						bewertung -= 20;
+					}
+				} else {
+					if(koords[ySoll - yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 's') {
+						bewertung -= 20;
+					}
+				}
+			} 
+		}
+
+		if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5) {
+			if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0){
+					if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 'w') {
+						if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5)
+							if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() == null) {
+								bewertung -= 20;
+							}
+					}
+				} else {
+					if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein().getColor() == 's') {
+						if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5)
+							if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() == null) {
+								bewertung -= 20;					}
+					}
+				}
+			} 
+		}
+
+		if(ySoll-yBewegung >= 0 && ySoll-yBewegung <= 5 && xSoll+xBewegung >= 0 && xSoll+xBewegung <= 5) {
+			if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein() != null) {
+				if(runde%2 == 0) {
+					if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein().getColor() == 'w') {
+						if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5)
+							if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() == null) {
+								bewertung -= 20;					}
+					}
+				} else {
+					if(koords[ySoll - yBewegung][xSoll + xBewegung].getSpielstein().getColor() == 's') {
+						if(ySoll+yBewegung >= 0 && ySoll+yBewegung <= 5 && xSoll-xBewegung >= 0 && xSoll-xBewegung <= 5)
+							if(koords[ySoll + yBewegung][xSoll - xBewegung].getSpielstein() == null) {
+								bewertung -= 20;				}
+					}
+				}
+			}
+		}
+
+		if(bewertung < -20) {
+			bewertung = -20;
+		} 
+
+		return bewertung;
+	}
 
 }
+

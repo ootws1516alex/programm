@@ -40,8 +40,8 @@ public class Spielfeld {
 
 		for(int i = 0; i < 6; i++){
 			for(int j = 0; j < 6; j++){
-				char neu = (char)(i+65);
-				String name = "" + neu + (j+1);
+				char neu = (char)(j+'A');
+				String name = "" + neu +(i+1);
 				koords[i][j] = new Koordinate(i,j,name);
 			}
 		}
@@ -111,3 +111,4 @@ public class Spielfeld {
 	}
 
 }
+
